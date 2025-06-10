@@ -6,22 +6,22 @@
       <h4 class="mb-4 text-center">Admin bejelentkezés</h4>
       <form @submit.prevent="adminForm">
         <div class="mb-3">
-          <label for="felhasznalonev" class="form-label">Felhasználónév</label>
+          <label for="username" class="form-label">Felhasználónév</label>
           <input
             type="text"
             class="form-control"
-            id="felhasznalonev"
-            v-model="felhasznalonev"
+            id="username"
+            v-model="username"
             required
           />
         </div>
         <div class="mb-3">
-          <label for="jelszo" class="form-label">Jelszó</label>
+          <label for="password" class="form-label">Jelszó</label>
           <input
             type="password"
             class="form-control"
-            id="jelszo"
-            v-model="jelszo"
+            id="password"
+            v-model="password"
             required
           />
         </div>
@@ -36,13 +36,13 @@
 export default {
   data() {
     return {
-      felhasznalonev: "",
-      jelszo: "",
+      username: "",
+      password: "",
     };
   },
   methods: {
     adminForm() {
-      if (this.felhasznalonev === "admin" && this.jelszo === "admin54321") {
+      if (this.username === "admin" && this.password === "admin54321") {
         localStorage.setItem("isAdmin", true);
         this.$router.push("/admin/dashboard");
       } else {

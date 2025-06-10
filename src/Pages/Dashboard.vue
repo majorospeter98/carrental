@@ -1,33 +1,35 @@
 <template>
   <div class="container">
-   <nav class="navbar navbar-light  px-3">
-    <router-link to="/admin/dashboard/cars" class="text-white">Autók</router-link>
-    <button @click="logOutAdmin" class="btn btn-light">Kijelentkezés</button>
-  </nav>
-
-    <h1 class="mb-5 mt-5 text-center">Foglalások:</h1>
-    <ul class="list-group">
-      <li
-        v-for="(foglalas, index) in foglalasok"
-        :key="index"
-        class="list-group-item py-3 px-4"
+    <nav class="navbar navbar-light px-3">
+      <router-link to="/admin/dashboard/cars" class="text-white"
+        >Autók</router-link
       >
-        <div class="d-flex justify-content-between flex-column flex-md-row">
-                   <div class="mb-2 mb-md-0">
-            <h5 class="mb-1">Név: {{ foglalas.name }}</h5>
-            <div>Email: {{ foglalas.email }}</div>
-            <div>Telefon: {{ foglalas.phone }}</div>
-            <div class="mt-2">
-              <span class="fw-semibold">Cím: </span> {{ foglalas.address }}
-            </div>
-            <div class="mt-1">
-              <span class="fw-semibold">Napok száma:</span> {{ foglalas.days }}
-            </div>
-             <div class="mt-1">
-              <span class="fw-semibold">Összeg:</span> {{ foglalas.price }} Ft 
-            </div>
-          </div>
-        
+      <button @click="logOutAdmin" class="btn btn-light">Kijelentkezés</button>
+    </nav>
+    <h1 class="mb-5 mt-5 text-center">Foglalások:</h1>
+    <ul class="list-unstyled container mb-5">
+      <li
+        v-for="(rents, index) in rents"
+        :key="index"
+        class="card mb-4 shadow-sm"
+      >
+        <div class="card-body">
+          <h5 class="card-title">Név: {{ rents.name }}</h5>
+          <p class="card-text mb-1">
+            <strong>Email:</strong> {{ rents.email }}
+          </p>
+          <p class="card-text mb-1">
+            <strong>Telefon:</strong> {{ rents.phone }}
+          </p>
+          <p class="card-text mb-1">
+            <strong>Cím:</strong> {{ rents.address }}
+          </p>
+          <p class="card-text mb-1">
+            <strong>Napok száma:</strong> {{ rents.days }}
+          </p>
+          <p class="card-text mb-0">
+            <strong>Összeg:</strong> {{ rents.price }} Ft
+          </p>
         </div>
       </li>
     </ul>
@@ -35,32 +37,28 @@
 </template>
 
 <script>
-import { useFoglalStore } from "../stores/rents";
+import { useRentsStore } from "../stores/rents";
 export default {
   computed: {
-    foglalasok() {
-      return useFoglalStore().rents;
+    rents() {
+      return useRentsStore().rents;
     },
   },
-  created() {
-    const store = useFoglalStore();
-    console.log(store);
-  },
-  methods:{
-logOutAdmin(){
-  localStorage.removeItem("isAdmin");
-  this.$router.push("/admin")
-}
+
+  methods: {
+    logOutAdmin() {
+      localStorage.removeItem("isAdmin");
+      this.$router.push("/admin");
+    },
   },
 
   beforeRouteEnter(_to, _from, next) {
-    if (!localStorage.getItem("isAdmin")) {  
-       // Ha nincs iylen localstorage token nem léphet ide be //
-            setTimeout(() => {
-        alert("Nincs jogosultságod")
-              next("/admin");
-       
-      },2000);
+    if (!localStorage.getItem("isAdmin")) {
+      // if no token redicrect
+      setTimeout(() => {
+        alert("Nincs jogosultságod");
+        next("/admin");
+      }, 2000);
     } else {
       next();
     }

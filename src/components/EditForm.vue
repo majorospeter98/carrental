@@ -1,16 +1,19 @@
 <template>
   <div>
-       <div
+    <div
       class="modal fade show d-block text-black"
       tabindex="-1"
-     
       style="background-color: rgba(0, 0, 0, 0.5)"
     >
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Autó szerkesztése</h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
+            <button
+              type="button"
+              class="btn-close"
+              @click="closeModal"
+            ></button>
           </div>
 
           <div class="modal-body">
@@ -45,37 +48,19 @@
                   id="pricePerDay"
                   class="form-control"
                   required
-                  min="0"
+                  min=1000
+                  max=50000
                 />
               </div>
 
-              
-
-              <div class="row mb-3">
-                <div class="col">
-                  <label class="form-label">Foglalás -tól</label>
-                  <input
-                    v-model="formCar.bookings[0].from"
-                    type="date"
-                    class="form-control"
-                    :min="today"
-                    required
-                  />
-                </div>
-                <div class="col">
-                  <label class="form-label">Foglalás -ig</label>
-                  <input
-                    v-model="formCar.bookings[0].to"
-                    type="date"
-                    class="form-control"
-                    :min="formCar.bookings[0].from"
-                    required
-                  />
-                </div>
-              </div>
-
               <div class="d-flex justify-content-end gap-2">
-                <button type="button" class="btn btn-secondary" @click="closeModal">Mégse</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="closeModal"
+                >
+                  Mégse
+                </button>
                 <button type="submit" class="btn btn-primary">Mentés</button>
               </div>
             </form>
@@ -92,7 +77,7 @@ export default {
   data() {
     return {
       formCar: { ...this.car },
-     today: new Date().toISOString().split("T")[0],
+      today: new Date().toISOString().split("T")[0],
     };
   },
   watch: {
@@ -104,9 +89,9 @@ export default {
     editCars() {
       this.$emit("edit", this.formCar);
     },
-    closeModal(){
-      this.$emit("close")
-    }
+    closeModal() {
+      this.$emit("close");
+    },
   },
 };
 </script>

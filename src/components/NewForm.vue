@@ -1,75 +1,72 @@
-<template>
-  <form
-    @submit.prevent="addNewCars"
-    class="p-4 border rounded shadow-sm "
-  >
-    <h4 class="mb-3">Autó hozzáadása</h4>
+ <template>
+  <div
+      class="modal fade show d-block text-black"
+      tabindex="-1"
+      style="background-color: rgba(0, 0, 0, 0.5)"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered vh-105">
+        <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title">Autó hozzáadása</h5>
+          <button type="button" class="btn-close" @click="closeModal"></button>
+        </div>
 
-    <div class="mb-3">
-      <label for="brand" class="form-label">Márka</label>
-      <input
-        v-model="newBrand"
-        type="text"
-        id="brand"
-        class="form-control"
-        required
-      />
-    </div>
+        <div class="modal-body">
+          <form @submit.prevent="addNewCars" class="needs-validation">
+            <div class="mb-3">
+              <label for="brand" class="form-label">Márka</label>
+              <input
+                v-model="newBrand"
+                type="text"
+                id="brand"
+                class="form-control"
+                required
+              />
+            </div>
 
-    <div class="mb-3">
-      <label for="model" class="form-label">Modell</label>
-      <input
-        v-model="newModell"
-        type="text"
-        id="model"
-        class="form-control"
-        required
-      />
-    </div>
+            <div class="mb-3">
+              <label for="modell" class="form-label">Modell</label>
+              <input
+                v-model="newModell"
+                type="text"
+                id="modell"
+                class="form-control"
+                required
+              />
+            </div>
 
-    <div class="mb-3">
-      <label for="pricePerDay" class="form-label">Napi ár (Ft)</label>
-      <input
-        v-model.number="newPricePerDay"
-        type="number"
-        id="pricePerDay"
-        class="form-control"
-        required
-        min="0"
-      />
-    </div>
+            <div class="mb-3">
+              <label for="pricePerDay" class="form-label">Napi ár (Ft)</label>
+              <input
+                v-model.number="newPricePerDay"
+                type="number"
+                id="pricePerDay"
+                class="form-control"
+                required
+                min=1000
+                max=50000
+              />
+            </div>
 
- 
-
-    <h5 class="mt-4">Első foglalás (opcionális)</h5>
-
-    <div class="row mb-3">
-      <div class="col">
-        <label class="form-label">Foglalás -tól</label>
-        <input
-          v-model="newBookingFrom"
-          type="date"
-          class="form-control"
-          :min="today"
-          required
-        />
-      </div>
-      <div class="col">
-        <label class="form-label">Foglalás -ig</label>
-        <input
-          v-model="newBookingTo"
-          type="date"
-          class="form-control" :min="newBookingFrom"
-          required
-        />
+            <div class="d-flex justify-content-end gap-2">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="closeModal"
+              >
+                Mégse
+              </button>
+              <button type="submit" class="btn btn-primary">Mentés</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-
-   <div class="d-flex justify-content-center mt-4">
-  <button type="submit" class="btn btn-light">Mentés</button>
-</div>
-  </form>
+  </div>
 </template>
+
+
+     
 <script>
 export default {
   data() {
@@ -77,28 +74,21 @@ export default {
       newBrand: "",
       newModell: "",
       newPricePerDay: "",
-          newBookingFrom:new Date().toISOString().substr(0, 10), 
-            today: new Date().toISOString().split("T")[0],
-      newBookingTo: null,
     };
   },
   methods: {
     addNewCars() {
-      console.log("xd");
-      const newCar = {
+            const newCar = {
         id: Date.now(),
         brand: this.newBrand,
         model: this.newModell,
         pricePerDay: parseInt(this.newPricePerDay),
-            bookings: [
-          {
-            from: this.newBookingFrom,
-            to: this.newBookingTo,
-          },
-        ],
+        image: "/images/default.jpg",  // adding default image here for every new car
       };
-      console.log(newCar);
       this.$emit("save", newCar);
+    },
+    closeModal() {
+      this.$emit("close");
     },
   },
 };

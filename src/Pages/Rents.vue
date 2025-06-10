@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <div class="container mt-4">
-      <h2>Foglalási űrlap</h2>
+  <div class="min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="container p-5 bg-light text-black rounded shadow-sm">
+      <h2 class="mb-4 text-center">Foglalási űrlap</h2>
+
       <form @submit.prevent="submitForm" class="row g-3">
         <div class="col-md-6">
           <label for="name" class="form-label">Név</label>
@@ -54,21 +55,17 @@
 
         <div class="col-md-3">
           <label for="days" class="form-label">Foglalandó napok száma</label>
-          <input readonly
+          <input
             type="number"
             id="days"
             class="form-control"
             v-model.number="maxDates"
-            :min="maxDates"
-                :max="maxDates"
-            required
+            disabled
           />
         </div>
 
         <div class="col-md-3">
-          <label for="totalPrice" class="form-label"
-            >Foglalás teljes összege (Ft)</label
-          >
+          <label for="totalPrice" class="form-label">Teljes ár (Ft)</label>
           <input
             type="number"
             id="totalPrice"
@@ -78,16 +75,15 @@
           />
         </div>
 
-        <div class="col-12 text-center mt-10">
-          <button type="submit" class="btn btn-light">Foglalás</button>
+        <div class="col-12 text-center mt-5">
+          <button type="submit" class="btn btn-primary px-5">Foglalás</button>
         </div>
       </form>
     </div>
   </div>
 </template>
-
 <script>
-import { useFoglalStore } from "../stores/rents";
+import { useRentsStore } from "../stores/rents";
 import { useCarStore } from "../stores/cars";
 export default {
   props: ["id"],
@@ -98,53 +94,66 @@ export default {
       email: "",
       address: "",
       phone: "",
-        };
+    };
   },
   computed: {
     sumPrice() {
       return this.selectedCar.pricePerDay * this.maxDates;
     },
     maxDates() {
-     return (
-  (new Date(useCarStore().endDate) - new Date(useCarStore().startDate)) /
-  (1000 * 60 * 60 * 24)
-) + 1;
+      return (
+        (new Date(useCarStore().endDate) - new Date(useCarStore().startDate)) /
+          (1000 * 60 * 60 * 24) +1
+      );
     },
   },
   created() {
-      const response = useCarStore();
-        const cars = response.cars;
+    const response = useCarStore();
+
+   
+    const cars = response.cars;
     this.selectedCar = cars.find((car) => car.id === parseInt(this.id));
+   
   },
   methods: {
     submitForm() {
-      const store = useFoglalStore();
+      const store = useRentsStore();
+
       store.rents.push({
-        name: this.name,
+        name: this.name,    //pushing into rents.js pinia
         email: this.email,
         address: this.address,
         phone: this.phone,
         days: this.maxDates,
         price: this.sumPrice,
       });
+      const newBooking = {
+        from: useCarStore().startDate,   // extract data from cars pinia store
+        to: useCarStore().endDate,
+      };
+      const carIndex = useCarStore().cars.findIndex(
+        (car) => car.id === this.selectedCar.id
+      );
+
+      (useCarStore().cars[carIndex].bookings ??= []).push(newBooking);
+
       (this.name = ""),
         (this.email = ""),
         (this.address = ""),
         (this.phone = ""),
-             this.$router.replace("/main")
+        this.$router.replace("/main");
     },
   },
-  beforeRouteEnter(to,_from,next){
-  const response = useCarStore();
-        const cars = response.cars;
-   const car= cars.find((car) => car.id === parseInt(to.params.id));
-   if(!car){
-  alert("Nem létező autó ")
-  next("/main")
-   }
-   else{
-    next()
-   }
-}
-  };
+  beforeRouteEnter(to, _from, next) {
+    const response = useCarStore();
+    const cars = response.cars;
+    const car = cars.find((car) => car.id === parseInt(to.params.id));  // id check, the page only open with existing id, if not redirect
+    if (!car) {
+      alert("Nem létező autó ");
+      next("/main");
+    } else {
+      next();
+    }
+  },
+};
 </script>
