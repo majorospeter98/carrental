@@ -2,7 +2,7 @@
   <div class="min-vh-100 d-flex justify-content-center align-items-center">
     <div class="container p-5 bg-light text-black rounded shadow-sm">
       <h2 class="mb-4 text-center">Foglalási űrlap</h2>
-
+      <h2 class="mb-4 text-center">Választott: {{selectedCar.brand}} {{selectedCar.model}}</h2>
       <form @submit.prevent="submitForm" class="row g-3">
         <div class="col-md-6">
           <label for="name" class="form-label">Név</label>
@@ -85,6 +85,7 @@
 <script>
 import { useRentsStore } from "../stores/rents";
 import { useCarStore } from "../stores/cars";
+ import { useToast } from "vue-toastification";
 export default {
   props: ["id"],
   data() {
@@ -118,7 +119,8 @@ export default {
   methods: {
     submitForm() {
       const store = useRentsStore();
-
+  const toast = useToast(); // itt példányosítod
+    toast.success('Sikeres foglalás',{timeout:1200});
       store.rents.push({
         name: this.name,    //pushing into rents.js pinia
         email: this.email,

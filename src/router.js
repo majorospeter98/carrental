@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
 import MainPage from "./Pages/MainPage.vue";
 import Rents from "./Pages/Rents.vue";
 import Dashboard from "./Pages/Dashboard.vue";
@@ -7,7 +7,7 @@ import Cars from "./Pages/Cars.vue";
 import NotFound from "./Pages/NotFound.vue";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     { path: "", redirect: "/main" },
     { path: "/main", component: MainPage },
