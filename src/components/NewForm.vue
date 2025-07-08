@@ -68,6 +68,7 @@
 
      
 <script>
+const baseUrl = import.meta.env.BASE_URL;
 export default {
   data() {
     return {
@@ -83,7 +84,7 @@ export default {
         brand: this.newBrand,
         model: this.newModell,
         pricePerDay: parseInt(this.newPricePerDay),
-        image: "/images/default.jpg",  // adding default image here for every new car
+        image: baseUrl + "images/default.jpg", // adding default image here for every new car
       };
       this.$emit("save", newCar);
     },
