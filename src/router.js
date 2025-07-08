@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  createWebHashHistory,
+} from "vue-router";
 import MainPage from "./Pages/MainPage.vue";
 import Rents from "./Pages/Rents.vue";
 import Dashboard from "./Pages/Dashboard.vue";

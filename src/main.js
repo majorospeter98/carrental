@@ -3,8 +3,8 @@ import App from "./App.vue";
 import router from "./router.js";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
-import Toast from 'vue-toastification';
-import 'vue-toastification/dist/index.css'; 
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 const app = createApp(App);
 const pinia = createPinia();

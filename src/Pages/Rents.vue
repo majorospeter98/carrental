@@ -2,7 +2,9 @@
   <div class="min-vh-100 d-flex justify-content-center align-items-center">
     <div class="container p-5 bg-light text-black rounded shadow-sm">
       <h2 class="mb-4 text-center">Foglalási űrlap</h2>
-      <h2 class="mb-4 text-center">Választott: {{selectedCar.brand}} {{selectedCar.model}}</h2>
+      <h2 class="mb-4 text-center">
+        Választott: {{ selectedCar.brand }} {{ selectedCar.model }}
+      </h2>
       <form @submit.prevent="submitForm" class="row g-3">
         <div class="col-md-6">
           <label for="name" class="form-label">Név</label>
@@ -85,7 +87,7 @@
 <script>
 import { useRentsStore } from "../stores/rents";
 import { useCarStore } from "../stores/cars";
- import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification";
 export default {
   props: ["id"],
   data() {
@@ -104,25 +106,22 @@ export default {
     maxDates() {
       return (
         (new Date(useCarStore().endDate) - new Date(useCarStore().startDate)) /
-          (1000 * 60 * 60 * 24) +1
+          (1000 * 60 * 60 * 24) +
+        1
       );
     },
   },
   created() {
     const response = useCarStore();
-
-   
     const cars = response.cars;
     this.selectedCar = cars.find((car) => car.id === parseInt(this.id));
-   
   },
   methods: {
     submitForm() {
       const store = useRentsStore();
-  const toast = useToast(); // itt példányosítod
-    toast.success('Sikeres foglalás',{timeout:1200});
+
       store.rents.push({
-        name: this.name,    //pushing into rents.js pinia
+        name: this.name, //pushing into rents.js pinia
         email: this.email,
         address: this.address,
         phone: this.phone,
@@ -130,7 +129,7 @@ export default {
         price: this.sumPrice,
       });
       const newBooking = {
-        from: useCarStore().startDate,   // extract data from cars pinia store
+        from: useCarStore().startDate, // extract data from cars pinia store
         to: useCarStore().endDate,
       };
       const carIndex = useCarStore().cars.findIndex(
@@ -138,7 +137,8 @@ export default {
       );
 
       (useCarStore().cars[carIndex].bookings ??= []).push(newBooking);
-
+      const toast = useToast();
+      toast.success("Sikeres foglalás", { timeout: 1200 });
       (this.name = ""),
         (this.email = ""),
         (this.address = ""),
@@ -149,7 +149,7 @@ export default {
   beforeRouteEnter(to, _from, next) {
     const response = useCarStore();
     const cars = response.cars;
-    const car = cars.find((car) => car.id === parseInt(to.params.id));  // id check, the page only open with existing id, if not redirect
+    const car = cars.find((car) => car.id === parseInt(to.params.id)); // id check, the page only open with existing id, if not redirect
     if (!car) {
       alert("Nem létező autó ");
       next("/main");
