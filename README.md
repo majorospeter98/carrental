@@ -1,6 +1,8 @@
 # udemx
 
-This template should help get you started developing with Vue 3 in Vite.
+<p>admin felület:</p>
+<p>felhasznalonev:admin</p>
+<p>jelszo:admin54321</p>
 
 ## Recommended IDE Setup
 
