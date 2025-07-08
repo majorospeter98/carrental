@@ -1,9 +1,10 @@
-<p>admin felület:</p>
-<p>felhasznalonev:admin</p>
-<p>jelszo:admin54321</p>
-
-<h1>Car Rental with Vue, Pinia & Bootstrap</h1>
-
+<p>
+  Admin path here:
+  <a target="_blank" href="https://majorospeter98.github.io/carrental/#/admin">Admin</a>
+</p>
+<p>Username: <code>admin</code></p>
+<p>Password: <code>admin54321</code></p>
+  <a href="https://majorospeter98.github.io/carrental/#/admin"</a>
 <h2>Browse, choose, and book the perfect car for your next journey.</h2>
 
 <p>This project allows you to:</p>
