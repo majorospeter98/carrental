@@ -16,11 +16,11 @@
   <li>View the list of cars, add new ones, and edit existing cars.</li>
  </ul>
 <h2> Live Demo: </h2>
-🖥️ https://majorospeter98.github.io/carrental/
+🖥️ <a href="https://majorospeter98.github.io/carrental/" target="_blank"> https://majorospeter98.github.io/carrent</a>
 
 <h2>Setup</h2>
 <p>Clone the project using the following command: </p>
-<p> 1) git clone https://majorospeter98.github.io/carrental/  </p>
+<p> 1) git clone https://github.com/majorospeter98/carrental  </p>
 <p> 2) Navigate to the project directory using the following command:  </p>
 <p> 3) cd carrental  </p>
 <h2>Client Setup </h2>
