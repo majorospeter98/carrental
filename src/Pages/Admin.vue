@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="p-3 text-center">
-      <router-link to="/" class="btn btn-light">Főőoldal</router-link>
+      <router-link to="/" class="btn btn-light">Főoldal</router-link>
     </div>
     <div
       class="container d-flex justify-content-center align-items-center vh-100"

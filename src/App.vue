@@ -1,6 +1,12 @@
 <template>
   <div>
-    <header></header>
+    <header>
+         <nav class="navbar navbar-light px-3">
+      <router-link to="/admin/" class="text-white"
+        >Admin</router-link
+      >
+         </nav>
+    </header>
     <main>
       <router-view></router-view>
     </main>
