@@ -1,6 +1,7 @@
 <template>
   <div class="grid lg:min-h-[75vh] lg:grid-cols-[1.2fr_1fr]">
-    <CarStage :car="car" sizes="(min-width: 1024px) 55vw, 100vw">
+    <!-- the stage is as tall as the form, so a cropped photo is far wider than its column -->
+    <CarStage :car="car" :task="t('bookingTitle')" sizes="(min-width: 1024px) 1600px, max(100vw, 750px)">
       <Link href="/main" class="btn btn-quiet">{{ t("back") }}</Link>
     </CarStage>
 
@@ -32,7 +33,7 @@ import { Link, useForm } from "@inertiajs/vue3";
 import CarStage from "../components/CarStage.vue";
 import DateFields from "../components/DateFields.vue";
 import FormField from "../components/FormField.vue";
-import { chosenDates, preferences } from "../preferences";
+import { chosenDates, clearDraft, draft, preferences } from "../preferences";
 import { quote } from "../utils/booking";
 import { dayLabel, money, t } from "../i18n";
 import type { Car, FieldErrors, Period } from "../types";
@@ -44,7 +45,7 @@ export default defineComponent({
   },
   data() {
     return {
-      form: useForm({ name: "", email: "", phone: "", address: "" }),
+      form: useForm({ ...draft }),
     };
   },
   computed: {
@@ -59,10 +60,19 @@ export default defineComponent({
     current() {
       return quote(this.car, this.dates.from, this.dates.to);
     },
+    typed(): typeof draft {
+      return this.form.data();
+    },
   },
   watch: {
     "dates.from": "forgetDateErrors",
     "dates.to": "forgetDateErrors",
+    typed(value: typeof draft) {
+      Object.assign(draft, value);
+    },
+  },
+  created() {
+    preferences.carId = this.car.id;
   },
   methods: {
     t,
@@ -78,6 +88,7 @@ export default defineComponent({
           // "back" from the confirmation should not return to a filled form
           replace: true,
           preserveScroll: true,
+          onSuccess: () => clearDraft(),
           onError: () => this.$nextTick(() => (this.$el as HTMLElement).querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()),
         });
     },

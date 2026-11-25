@@ -1,5 +1,5 @@
 <template>
-  <CarForm :title="t('addCar')" @saved="$emit('saved')" @close="$emit('close')" />
+  <CarForm :title="t('addCar')" @saved="$emit('saved', $event)" @close="$emit('close')" />
 </template>
 
 <script lang="ts">

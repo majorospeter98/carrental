@@ -52,7 +52,7 @@ export default defineComponent({
     submit() {
       const options = {
         preserveScroll: true,
-        onSuccess: () => this.$emit("saved"),
+        onSuccess: () => this.$emit("saved", `${this.form.brand} ${this.form.model}`),
         onError: () => this.$nextTick(() => (this.$el as HTMLElement).querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()),
       };
       if (this.car) this.form.put(`/admin/dashboard/cars/${this.car.id}`, options);

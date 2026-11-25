@@ -23,6 +23,9 @@ const hu = {
   allRequired: "Minden mező kitöltése kötelező.", clash: "Kiválasztott, de foglalt",
   bookedDays: "Foglalt napok", noBookedDays: "Nincs foglalt nap.",
   description: "Autókölcsönző demó: válassz időszakot, nézd meg a szabad autókat és foglalj.",
+  offline: "A szerver nem érhető el. Ellenőrizd a kapcsolatot, és próbáld újra.",
+  serverError: "Hiba történt a szerveren. Próbáld újra.", close: "Bezárás",
+  mainNav: "Főmenü", adminNav: "Admin menü", saved: "Mentve", stripCut: "A naptár utolsó látható napja:",
 };
 
 export type MessageKey = keyof typeof hu;
@@ -50,6 +53,9 @@ const en: Record<MessageKey, string> = {
   allRequired: "All fields are required.", clash: "Selected, but booked",
   bookedDays: "Booked days", noBookedDays: "No booked days.",
   description: "Car rental demo: pick your dates, see which cars are available and book.",
+  offline: "Could not reach the server. Check your connection and try again.",
+  serverError: "Something went wrong on the server. Try again.", close: "Close",
+  mainNav: "Main menu", adminNav: "Admin menu", saved: "Saved", stripCut: "Calendar shown up to",
 };
 
 const messages: Record<Lang, Record<MessageKey, string>> = { hu, en };
@@ -74,6 +80,12 @@ export const formatDate = (iso: string, options: Intl.DateTimeFormatOptions = { 
   iso
     ? new Intl.DateTimeFormat(intlLocale(), { timeZone: "UTC", ...options }).format(new Date(iso))
     : "–";
+
+/* with the year: for bookings, which may be months ahead */
+export const fullDate = (iso: string) => formatDate(iso, { year: "numeric", month: "short", day: "numeric" });
+
+export const foundLabel = (n: number) =>
+  locale.lang === "hu" ? `${n} szabad autó erre az időszakra.` : `${n} ${n === 1 ? "car" : "cars"} available for these dates.`;
 
 export const dayLabel = (n: number) =>
   locale.lang === "hu" ? `${n} nap` : `${n} ${n === 1 ? "day" : "days"}`;

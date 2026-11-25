@@ -5,9 +5,9 @@
 
     <template v-if="rents.length">
       <ul>
-        <li v-for="rent in rents" :key="rent.id" class="grid gap-x-6 gap-y-3 border-t border-line py-5 sm:grid-cols-[8rem_1fr_1fr_auto]">
+        <li v-for="rent in rents" :key="rent.id" class="grid gap-x-6 gap-y-3 border-t border-line py-5 sm:grid-cols-[10rem_1fr_1fr_auto]">
           <span class="font-display text-2xl leading-tight font-semibold text-cobalt uppercase">
-            {{ formatDate(rent.from) }} –<br />{{ formatDate(rent.to) }}
+            {{ fullDate(rent.from) }} –<br />{{ fullDate(rent.to) }}
           </span>
           <div class="min-w-0 break-words text-soft">
             <b class="block text-ink">{{ rent.name }}</b>
@@ -40,7 +40,7 @@
 import { defineComponent, type PropType } from "vue";
 import { router } from "@inertiajs/vue3";
 import AdminNav from "../components/AdminNav.vue";
-import { dayLabel, formatDate, money, t } from "../i18n";
+import { dayLabel, fullDate, money, t } from "../i18n";
 import type { Rent } from "../types";
 
 export default defineComponent({
@@ -54,7 +54,7 @@ export default defineComponent({
   methods: {
     t,
     money,
-    formatDate,
+    fullDate,
     dayLabel,
     ask() {
       this.confirming = true;

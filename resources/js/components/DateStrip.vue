@@ -7,6 +7,7 @@
       </li>
     </ul>
     <p class="sr-only">{{ bookedText }}</p>
+    <p v-if="cutAt" class="mt-2 text-sm text-soft">{{ t("stripCut") }} {{ cutAt }}</p>
     <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-soft">
       <span><i class="day-picked mr-2 inline-block h-3 w-3" aria-hidden="true"></i>{{ summary }}</span>
       <span aria-hidden="true"><i class="day-free mr-2 inline-block h-3 w-3"></i>{{ t("available") }}</span>
@@ -43,6 +44,11 @@ export default defineComponent({
           class: busy ? (picked ? "day-clash" : "day-booked") : picked ? "day-picked" : "day-free",
         };
       });
+    },
+    // the last day drawn, when the selection runs past it
+    cutAt(): string {
+      const last = stripDays(this.from, this.to).at(-1)!;
+      return isValidRange(this.from, this.to) && this.to > last ? formatDate(last) : "";
     },
     clash() {
       return isValidRange(this.from, this.to) && !isFree(this.car, this.from, this.to);

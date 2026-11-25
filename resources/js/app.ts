@@ -24,5 +24,5 @@ createInertiaApp({
       .use(plugin)
       .mount(el!); // only server rendering has no element
   },
-  progress: { color: "#ffb02e" },
+  progress: { color: "var(--color-amber)" },
 });

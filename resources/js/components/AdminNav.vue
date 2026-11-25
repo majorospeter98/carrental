@@ -1,5 +1,5 @@
 <template>
-  <nav class="mb-8 flex flex-wrap items-center gap-2">
+  <nav class="mb-8 flex flex-wrap items-center gap-2" :aria-label="t('adminNav')">
     <Link
       v-for="link in links"
       :key="link.to"

@@ -5,7 +5,7 @@
   <div class="flex min-h-screen flex-col">
     <header class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-line px-4 py-2 sm:px-12">
       <Link href="/main" class="inline-flex min-h-11 min-w-0 items-center font-display text-2xl font-bold wrap-anywhere uppercase">{{ t("brand") }}</Link>
-      <nav class="flex flex-wrap items-center gap-x-3">
+      <nav class="flex flex-wrap items-center gap-x-3" :aria-label="t('mainNav')">
         <Link href="/admin" class="inline-flex min-h-11 min-w-11 items-center justify-center font-semibold text-soft hover:text-ink">{{ t("admin") }}</Link>
         <div role="group" :aria-label="t('language')" class="flex">
           <button
@@ -25,12 +25,21 @@
     <main ref="main" class="flex-1">
       <slot />
     </main>
+
+    <!-- a request that got no page back. Fixed, so it shows wherever the visitor has scrolled;
+         at the top, so it does not cover the button they will press again -->
+    <div class="fixed inset-x-4 top-2 z-10 mx-auto max-w-md" role="alert">
+      <div v-if="failure" class="notice flex items-center justify-between gap-4 border-alert!">
+        <p class="font-semibold">{{ t(failure) }}</p>
+        <button type="button" class="btn btn-quiet px-4" @click="failure = null">{{ t("close") }}</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import { locale, setLang, t, type MessageKey } from "../i18n";
 import type { Car } from "../types";
 
@@ -48,6 +57,8 @@ export default defineComponent({
   data() {
     return {
       locale,
+      failure: null as MessageKey | null,
+      stopListening: [] as (() => void)[],
     };
   },
   computed: {
@@ -75,6 +86,23 @@ export default defineComponent({
   },
   created() {
     document.documentElement.lang = locale.lang;
+    // without these, Inertia shows the raw error page in an overlay, or nothing at all
+    this.stopListening = [
+      router.on("start", () => {
+        this.failure = null;
+      }),
+      router.on("httpException", (event) => {
+        event.preventDefault();
+        this.failure = event.detail.response.status === 429 ? "tooMany" : "serverError";
+      }),
+      router.on("networkError", (event) => {
+        event.preventDefault();
+        this.failure = "offline";
+      }),
+    ];
+  },
+  unmounted() {
+    this.stopListening.forEach((stop) => stop());
   },
   methods: {
     t,

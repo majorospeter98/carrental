@@ -2,6 +2,7 @@
   <!-- phones: dates first. wider screens: the car first, dates in the dock below -->
   <div class="flex flex-col pb-8">
     <form
+      ref="form"
       class="order-1 flex flex-wrap items-start gap-3 px-4 pt-5 sm:order-2 sm:px-12"
       novalidate
       @submit.prevent="searchAvailableCars"
@@ -16,10 +17,12 @@
         <strong class="block text-lg">{{ t("noResults") }}</strong>
         {{ t("noResultsHelp") }}
       </p>
+      <p v-else-if="found" class="px-4 pt-3 font-semibold sm:px-12">{{ foundLabel(found) }}</p>
     </div>
 
     <CarStage v-if="car" :car="car" class="order-2 mt-5 sm:order-1 sm:mt-0 sm:min-h-[min(60vh,40rem)]">
-      <div class="sm:text-right" aria-live="polite">
+      <div class="sm:text-right" aria-live="polite" aria-atomic="true">
+        <span class="sr-only">{{ car.brand }} {{ car.model }}</span>
         <strong class="block font-display text-5xl leading-none text-amber lg:text-6xl">
           {{ money(free ? current.price : car.pricePerDay) }}
         </strong>
@@ -39,7 +42,7 @@
             type="button"
             class="grid h-full w-full grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-3 rounded border border-line bg-deep p-2 text-left aria-pressed:border-amber aria-pressed:bg-raise"
             :aria-pressed="item.car.id === car.id"
-            @click="shownId = item.car.id"
+            @click="preferences.carId = item.car.id"
           >
             <CarPhoto :car="item.car" decorative sizes="72px" class="h-14 w-18 rounded-xs" :class="{ 'brightness-50 grayscale': item.booked }" />
             <span class="min-w-0 wrap-anywhere">
@@ -68,7 +71,7 @@ import DateFields from "../components/DateFields.vue";
 import DateStrip from "../components/DateStrip.vue";
 import { chosenDates, preferences } from "../preferences";
 import { dateErrors, isFree, isValidRange, quote } from "../utils/booking";
-import { dayLabel, money, t } from "../i18n";
+import { dayLabel, foundLabel, money, t } from "../i18n";
 import type { Car, FieldErrors, Period } from "../types";
 
 export default defineComponent({
@@ -78,7 +81,7 @@ export default defineComponent({
   },
   data() {
     return {
-      shownId: null as number | null,
+      preferences,
       searched: false,
       errors: {} as FieldErrors,
     };
@@ -92,7 +95,7 @@ export default defineComponent({
     },
     // undefined while the fleet is empty
     car(): Car | undefined {
-      return this.cars.find((car) => car.id === this.shownId) ?? this.cars[0];
+      return this.cars.find((car) => car.id === preferences.carId) ?? this.cars[0];
     },
     current() {
       return quote(this.car, this.dates.from, this.dates.to);
@@ -111,6 +114,10 @@ export default defineComponent({
     noResults() {
       return this.searched && this.valid && this.fleet.every((item) => item.booked);
     },
+    // the answer to pressing the search button
+    found() {
+      return this.searched && this.valid ? this.fleet.filter((item) => !item.booked).length : 0;
+    },
   },
   watch: {
     "dates.from": "forgetSearch",
@@ -120,6 +127,7 @@ export default defineComponent({
     t,
     money,
     dayLabel,
+    foundLabel,
     forgetSearch() {
       this.searched = false;
       this.errors = {};
@@ -127,10 +135,13 @@ export default defineComponent({
     searchAvailableCars() {
       this.errors = dateErrors(this.dates.from, this.dates.to);
       this.searched = !Object.keys(this.errors).length;
-      if (!this.searched) return;
+      if (!this.searched) {
+        this.$nextTick(() => (this.$refs.form as HTMLElement).querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
+        return;
+      }
       // put a free car on stage if the current one is taken
       const freeCar = this.fleet.find((item) => !item.booked);
-      if (!this.free && freeCar) this.shownId = freeCar.car.id;
+      if (!this.free && freeCar) preferences.carId = freeCar.car.id;
     },
   },
 });

@@ -35,7 +35,7 @@ ENV APP_NAME="Autókölcsönző" \
     INERTIA_SSR_ENABLED=false
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
-    && a2enmod rewrite \
+    && a2enmod rewrite headers \
     && sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
 COPY --from=vendor /var/www/html ./

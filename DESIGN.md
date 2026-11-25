@@ -110,14 +110,14 @@ A blue-black ground, one warm action colour and a cool second accent. Tokens liv
 - **Night** (`night`): page ground.
 - **Deep** and **Raise** (`deep`, `raise`): panels, inputs, then selected or raised items.
 - **Line** (`line`): decorative dividers. Too faint to carry meaning on its own.
-- **Edge** (`edge`): control borders and the booked-day hatch. At least 3:1 on `night` and `deep`.
+- **Edge** (`edge`): control borders and the booked-day outline and slash. At least 3:1 on `night` and `deep`.
 - **Ink** and **Soft** (`ink`, `soft`): text and secondary text.
 - **Dusk** (`dusk`): the blue cast at the top of the stage gradient.
 
 ### Named Rules
 **The Amber Means Act Rule.** Amber marks what you can act on, what you picked and what it costs. Never decoration.
 
-**The Shape As Well Rule.** A state is never told by colour alone: booked days are hatched, errors carry text.
+**The Shape As Well Rule.** A state is never told by colour alone: booked days are struck through, errors carry text.
 
 ## Typography
 
@@ -164,16 +164,16 @@ Small corners: `sm` (4px) on controls and panels, `xs` (2px) on photos and day b
 Header: brand left, Admin link and HU/EN right; the active language is amber and underlined. Admin navigation marks the current page with a `deep` fill and amber text.
 
 ### Notices and confirmation
-`.notice` is a `raise` panel with a cobalt border. Destructive actions on the admin's data are confirmed inline in a notice, not in a modal.
+`.notice` is a `raise` panel with a cobalt border. A request that gets no page back (offline, rate limit, server error) shows a notice with an `alert` border, fixed to the top (clear of the submit buttons), with a close button. Destructive actions on the admin's data are confirmed inline in a notice, not in a modal.
 
 ### CarStage
 Full-bleed photo with a gradient to `night`; name and action sit over it. The photo fades up from dark (0.9s, ease-out), off with reduced motion.
 
 ### DateStrip
-One block per day. Free: `raise` fill. Selected: amber fill. Booked: `edge` outline with hatch. Selected and booked: `alert` hatch. The legend uses the same classes, and screen readers get the booked ranges as text.
+One block per day. Free: `raise` fill with an `edge` outline. Selected: amber fill. Booked: `edge` outline with one diagonal slash. Selected and booked: `alert` fill with a `night` slash. No striped fills. The legend uses the same classes, and screen readers get the booked ranges as text.
 
 ### CarPhoto
-The photo, or a line drawing when a car has none. Shipped photos come as 320, 800, 1280 and 1920px WebP. Where the car's name is written beside it, the picture is decorative.
+The photo, or a line drawing when a car has none; on the stage the drawing sits above the name, not behind it. Shipped photos come as 320, 800, 1280 and 1920px WebP. Where the car's name is written beside it, the picture is decorative.
 
 ## Do's and Don'ts
 

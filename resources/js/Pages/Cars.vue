@@ -2,8 +2,14 @@
   <div class="page">
     <AdminNav />
 
-    <NewForm v-if="adding" @saved="closeForm" @close="closeForm" />
-    <EditForm v-else-if="selectedCar" :car="selectedCar" @saved="closeForm" @close="closeForm" />
+    <!-- always there, so a message added to it is announced. Sticky: focus goes back to
+         the button that opened the form, which may be far down the list -->
+    <div class="sticky top-2 z-10" role="status">
+      <p v-if="savedName" class="notice mb-6 wrap-anywhere">{{ t("saved") }}: {{ savedName }}</p>
+    </div>
+
+    <NewForm v-if="adding" @saved="onSaved" @close="closeForm" />
+    <EditForm v-else-if="selectedCar" :car="selectedCar" @saved="onSaved" @close="closeForm" />
 
     <template v-else>
       <h1 class="page-title">{{ t("cars") }}</h1>
@@ -16,12 +22,12 @@
           <CarPhoto :car="car" decorative sizes="(min-width: 640px) 144px, 96px" class="aspect-16/10 w-full rounded-xs" />
           <b class="text-lg break-words">{{ car.brand }} {{ car.model }}</b>
           <span class="col-start-2 sm:col-start-auto">{{ money(car.pricePerDay) }} {{ t("perDay") }}</span>
-          <button type="button" class="btn btn-quiet col-start-2 justify-self-start sm:col-start-auto" :data-return="car.id" @click="selectedCar = car">
+          <button type="button" class="btn btn-quiet col-start-2 justify-self-start sm:col-start-auto" :data-return="car.id" :aria-label="`${t('edit')}: ${car.brand} ${car.model}`" @click="open(car)">
             {{ t("edit") }}
           </button>
         </li>
       </ul>
-      <button type="button" class="btn mt-4" data-return="add" @click="adding = true">{{ t("addCar") }}</button>
+      <button type="button" class="btn mt-4" data-return="add" @click="open(null)">{{ t("addCar") }}</button>
     </template>
   </div>
 </template>
@@ -44,11 +50,22 @@ export default defineComponent({
     return {
       adding: false,
       selectedCar: null as Car | null,
+      savedName: "",
     };
   },
   methods: {
     t,
     money,
+    /* null opens the empty form */
+    open(car: Car | null) {
+      this.savedName = "";
+      this.selectedCar = car;
+      this.adding = !car;
+    },
+    onSaved(name: string) {
+      this.savedName = name;
+      this.closeForm();
+    },
     /* back to the list, with focus on the button that opened the form */
     closeForm() {
       const key = this.adding ? "add" : this.selectedCar?.id;

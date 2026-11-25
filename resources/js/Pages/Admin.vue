@@ -4,8 +4,8 @@
     <h1 class="mb-6 text-5xl wrap-anywhere">{{ t("loginTitle") }}</h1>
     <form class="grid gap-4" novalidate @submit.prevent="adminForm">
       <FormField v-model="form.username" name="username" required :label="t('username')" autocomplete="username" />
-      <FormField v-model="form.password" name="password" type="password" required :label="t('password')" autocomplete="current-password" />
-      <p v-if="loginError" class="text-sm font-semibold text-alert" role="alert">{{ t(loginError) }}</p>
+      <FormField v-model="form.password" name="password" type="password" required :label="t('password')" autocomplete="current-password" :aria-describedby="loginError ? 'login-error' : undefined" />
+      <p v-if="loginError" id="login-error" class="text-sm font-semibold text-alert" role="alert">{{ t(loginError) }}</p>
       <button type="submit" class="btn" :disabled="form.processing">{{ t("login") }}</button>
       <p class="text-sm text-soft">{{ t("demoHint") }}</p>
     </form>
@@ -35,7 +35,10 @@ export default defineComponent({
   methods: {
     t,
     adminForm() {
-      this.form.post("/admin");
+      this.form.post("/admin", {
+        // the disabled button dropped focus: put it where the retry starts
+        onError: () => this.$nextTick(() => (this.$el as HTMLElement).querySelector<HTMLElement>("#field-password")?.focus()),
+      });
     },
   },
 });

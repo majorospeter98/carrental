@@ -1,9 +1,9 @@
 <template>
-  <CarStage :car="car" class="min-h-[75vh]">
+  <CarStage :car="car" sizes="max(100vw, 145vh)" class="min-h-[75vh]">
     <div class="w-full sm:flex sm:items-end sm:justify-between sm:gap-6">
       <div>
         <h2 class="mb-2 text-4xl" data-focus tabindex="-1">{{ t("doneTitle") }}</h2>
-        <p>{{ formatDate(rent.from) }} – {{ formatDate(rent.to) }}</p>
+        <p>{{ fullDate(rent.from) }} – {{ fullDate(rent.to) }}</p>
         <p class="mb-4">{{ t("doneText") }}</p>
       </div>
       <div class="sm:text-right">
@@ -19,7 +19,7 @@
 import { defineComponent, type PropType } from "vue";
 import { Link } from "@inertiajs/vue3";
 import CarStage from "../components/CarStage.vue";
-import { dayLabel, formatDate, money, t } from "../i18n";
+import { dayLabel, fullDate, money, t } from "../i18n";
 import type { Car, Receipt } from "../types";
 
 export default defineComponent({
@@ -28,6 +28,6 @@ export default defineComponent({
     rent: { type: Object as PropType<Receipt>, required: true },
     car: { type: Object as PropType<Car>, required: true },
   },
-  methods: { t, money, formatDate, dayLabel },
+  methods: { t, money, fullDate, dayLabel },
 });
 </script>

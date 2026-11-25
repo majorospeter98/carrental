@@ -5,7 +5,8 @@ import { defineComponent, h, reactive } from "vue";
 
 vi.mock("@inertiajs/vue3", () => {
   const page = reactive({ url: "/", component: "", props: {} });
-  const router = { post: vi.fn(), put: vi.fn(), delete: vi.fn() };
+  // "on" hands back the function that stops listening
+  const router = { post: vi.fn(), put: vi.fn(), delete: vi.fn(), on: vi.fn(() => () => {}) };
   const useForm = (initial: Record<string, unknown>) => {
     let transform = (data: Record<string, unknown>) => data;
     const form: Record<string, any> = reactive({
@@ -35,13 +36,15 @@ vi.mock("@inertiajs/vue3", () => {
 const mocked = await import("@inertiajs/vue3");
 // "page" exists only on the stand-in above
 const { page, router } = mocked as unknown as { page: { props: object }; router: Record<string, Mock> };
-const { preferences } = await import("../../resources/js/preferences");
+const { preferences, clearDraft } = await import("../../resources/js/preferences");
 const { locale } = await import("../../resources/js/i18n");
 
 beforeEach(() => {
   Object.values(router).forEach((fn) => fn.mockReset());
   localStorage.clear();
   preferences.dates = null;
+  preferences.carId = null;
+  clearDraft();
   locale.lang = "hu";
   page.props = {};
 });

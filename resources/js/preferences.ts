@@ -31,7 +31,13 @@ export const loadLang = (): Lang => (load("lang") === "en" ? "en" : "hu");
 
 export const saveLang = (lang: Lang) => save("lang", lang);
 
-export const preferences = reactive({ dates: loadDates() });
+/* carId is the car last put on stage, so "Back" returns to it. It is not saved. */
+export const preferences = reactive({ dates: loadDates(), carId: null as number | null });
+
+/* What the renter has typed, kept while they look around. Personal data: memory only, never storage. */
+const emptyDraft = { name: "", email: "", phone: "", address: "" };
+export const draft = reactive({ ...emptyDraft });
+export const clearDraft = () => Object.assign(draft, emptyDraft);
 
 /* Nothing saved or a day gone by: start from today. A field the visitor emptied stays empty. */
 export function chosenDates(saved: Period | null): Period {
