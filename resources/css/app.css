@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/* "Night": city after dark. Amber is the action, price and selected day. No glows. */
+@theme {
+  --color-night: #060d1f;
+  --color-deep: #0b1630;
+  --color-raise: #17254a;
+  --color-line: #24365f;
+  --color-edge: #4e6aa8;
+  --color-ink: #eef3ff;
+  --color-soft: #a3b4d8;
+  --color-amber: #ffb02e;
+  --color-amber-lift: #ffc460;
+  --color-cobalt: #4d83ff;
+  --color-alert: #ff8a7a;
+  --color-dusk: #0b2878;
+
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Barlow", ui-sans-serif, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  body {
+    background: var(--color-night);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+  button,
+  a {
+    cursor: pointer;
+  }
+  input {
+    caret-color: var(--color-amber);
+  }
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-night);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-amber);
+    outline-offset: 2px;
+  }
+  /* headings take focus only from code, to announce a new page */
+  h1[tabindex="-1"]:focus,
+  h2[tabindex="-1"]:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center rounded border border-amber bg-amber px-6 py-2 font-bold whitespace-nowrap text-night transition-colors hover:bg-amber-lift;
+  }
+  .btn-quiet {
+    @apply border-edge bg-night/60 text-ink hover:border-amber hover:bg-night/60 hover:text-amber;
+  }
+  .btn-off {
+    @apply cursor-not-allowed border-line bg-deep text-soft hover:bg-deep;
+  }
+  .input {
+    @apply min-h-12 w-full rounded border border-edge bg-deep px-3 py-2 text-ink placeholder:text-soft;
+  }
+  .page {
+    @apply mx-auto w-full max-w-6xl px-4 py-10 sm:px-12;
+  }
+  .page-narrow {
+    @apply mx-auto w-full max-w-md px-4 py-10;
+  }
+  .page-title {
+    @apply mb-6 text-5xl wrap-anywhere sm:text-7xl;
+  }
+  .notice {
+    @apply rounded border border-cobalt bg-raise px-5 py-4;
+  }
+  /* date strip: booked days are hatched, so they differ by shape as well as colour */
+  .day-free {
+    @apply bg-raise;
+  }
+  .day-picked {
+    @apply bg-amber;
+  }
+  .day-booked {
+    border: 1px solid var(--color-edge);
+    background: repeating-linear-gradient(135deg, transparent 0 4px, var(--color-edge) 4px 6px);
+  }
+  .day-clash {
+    background: repeating-linear-gradient(135deg, var(--color-alert) 0 4px, var(--color-night) 4px 6px);
+  }
+}
+
+/* The one authored motion: the car comes out of the dark when the stage changes. */
+.arrive {
+  animation: arrive 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    filter: brightness(0.2) blur(10px);
+    transform: scale(1.04);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrive {
+    animation: none;
+  }
+}

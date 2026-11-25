@@ -1,0 +1,313 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T13:32:22.288Z",
+  "title": "Design System: Night",
+  "extensions": {
+    "colorMeta": {
+      "night": {
+        "role": "neutral",
+        "displayName": "Night",
+        "canonical": "#060d1f",
+        "tonalRamp": [
+          "#020308",
+          "#030710",
+          "#050a17",
+          "#060d1f",
+          "#383d4c",
+          "#6a6e79",
+          "#9b9ea5",
+          "#cdcfd2"
+        ]
+      },
+      "deep": {
+        "role": "neutral",
+        "displayName": "Deep",
+        "canonical": "#0b1630",
+        "tonalRamp": [
+          "#03060c",
+          "#060b18",
+          "#081124",
+          "#0b1630",
+          "#3c4559",
+          "#6d7383",
+          "#9da2ac",
+          "#ced0d6"
+        ]
+      },
+      "raise": {
+        "role": "neutral",
+        "displayName": "Raise",
+        "canonical": "#17254a",
+        "tonalRamp": [
+          "#060913",
+          "#0c1325",
+          "#111c38",
+          "#17254a",
+          "#45516e",
+          "#747c92",
+          "#a2a8b7",
+          "#d1d3db"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#24365f",
+        "tonalRamp": [
+          "#090e18",
+          "#121b30",
+          "#1b2947",
+          "#24365f",
+          "#505e7f",
+          "#7c869f",
+          "#a7afbf",
+          "#d3d7df"
+        ]
+      },
+      "edge": {
+        "role": "neutral",
+        "displayName": "Edge",
+        "canonical": "#4e6aa8",
+        "tonalRamp": [
+          "#141b2a",
+          "#273554",
+          "#3b507e",
+          "#4e6aa8",
+          "#7188b9",
+          "#95a6cb",
+          "#b8c3dc",
+          "#dce1ee"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#eef3ff",
+        "tonalRamp": [
+          "#3c3d40",
+          "#777a80",
+          "#b3b6bf",
+          "#eef3ff",
+          "#f1f5ff",
+          "#f5f8ff",
+          "#f8faff",
+          "#fcfdff"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft",
+        "canonical": "#a3b4d8",
+        "tonalRamp": [
+          "#292d36",
+          "#525a6c",
+          "#7a87a2",
+          "#a3b4d8",
+          "#b5c3e0",
+          "#c8d2e8",
+          "#dae1ef",
+          "#edf0f7"
+        ]
+      },
+      "amber": {
+        "role": "primary",
+        "displayName": "Amber",
+        "canonical": "#ffb02e",
+        "tonalRamp": [
+          "#402c0c",
+          "#805817",
+          "#bf8423",
+          "#ffb02e",
+          "#ffc058",
+          "#ffd082",
+          "#ffdfab",
+          "#ffefd5"
+        ]
+      },
+      "amber-lift": {
+        "role": "primary",
+        "displayName": "Amber Lift",
+        "canonical": "#ffc460",
+        "tonalRamp": [
+          "#403118",
+          "#806230",
+          "#bf9348",
+          "#ffc460",
+          "#ffd080",
+          "#ffdca0",
+          "#ffe7bf",
+          "#fff3df"
+        ]
+      },
+      "cobalt": {
+        "role": "secondary",
+        "displayName": "Cobalt",
+        "canonical": "#4d83ff",
+        "tonalRamp": [
+          "#132140",
+          "#274280",
+          "#3a62bf",
+          "#4d83ff",
+          "#719cff",
+          "#94b5ff",
+          "#b8cdff",
+          "#dbe6ff"
+        ]
+      },
+      "alert": {
+        "role": "tertiary",
+        "displayName": "Alert",
+        "canonical": "#ff8a7a",
+        "tonalRamp": [
+          "#40231f",
+          "#80453d",
+          "#bf685c",
+          "#ff8a7a",
+          "#ffa195",
+          "#ffb9af",
+          "#ffd0ca",
+          "#ffe8e4"
+        ]
+      },
+      "dusk": {
+        "role": "neutral",
+        "displayName": "Dusk",
+        "canonical": "#0b2878",
+        "tonalRamp": [
+          "#030a1e",
+          "#06143c",
+          "#081e5a",
+          "#0b2878",
+          "#3c5393",
+          "#6d7eae",
+          "#9da9c9",
+          "#ced4e4"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Car name on the stage."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Form headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Everything else."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels and errors."
+      }
+    },
+    "shadows": [
+      {
+        "name": "name-legibility",
+        "value": "0 4px 24px rgb(0 0 0 / 0.55)",
+        "purpose": "Text shadow behind the car name on the photo."
+      }
+    ],
+    "motion": [
+      {
+        "name": "arrive",
+        "value": "0.9s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Stage photo fades up from dark. Off with reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action on a screen.",
+      "html": "<button class=\"ds-btn\">Lefoglalom</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:8px 24px;border-radius:4px;font:700 1rem Barlow,sans-serif;border:1px solid;cursor:pointer;background:#ffb02e;border-color:#ffb02e;color:#060d1f}.ds-btn:hover{background:#ffc460}.ds-btn:focus-visible{outline:3px solid var(--color-amber,#ffb02e);outline-offset:2px}"
+    },
+    {
+      "name": "Quiet button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Secondary actions.",
+      "html": "<button class=\"ds-quiet\">Mégse</button>",
+      "css": ".ds-quiet{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:8px 24px;border-radius:4px;font:700 1rem Barlow,sans-serif;border:1px solid;cursor:pointer;background:#060d1f;border-color:#4e6aa8;color:#eef3ff}.ds-quiet:hover{border-color:#ffb02e;color:#ffb02e}.ds-quiet:focus-visible{outline:3px solid var(--color-amber,#ffb02e);outline-offset:2px}"
+    },
+    {
+      "name": "Input field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labelled field on a panel.",
+      "html": "<label class=\"ds-field\">Név<input></label>",
+      "css": ".ds-field{display:grid;gap:4px;font:600 .875rem Barlow,sans-serif;color:#a3b4d8}.ds-field input{min-height:48px;padding:8px 12px;border:1px solid #4e6aa8;border-radius:4px;background:#0b1630;color:#eef3ff;font-size:1rem}.ds-field input:focus-visible{outline:3px solid #ffb02e;outline-offset:2px}"
+    },
+    {
+      "name": "Notice",
+      "kind": "custom",
+      "refersTo": "notice",
+      "description": "Messages and inline confirmation.",
+      "html": "<p class=\"ds-notice\">Nincsenek foglalások.</p>",
+      "css": ".ds-notice{padding:16px 20px;border:1px solid #4d83ff;border-radius:4px;background:#17254a;color:#eef3ff;font:400 1rem Barlow,sans-serif}"
+    },
+    {
+      "name": "Date strip blocks",
+      "kind": "custom",
+      "description": "Free, selected, booked, and selected but booked.",
+      "html": "<div class=\"ds-days\"><i class=\"f\"></i><i class=\"p\"></i><i class=\"b\"></i><i class=\"c\"></i></div>",
+      "css": ".ds-days{display:flex;gap:4px}.ds-days i{width:36px;height:44px;border-radius:2px}.ds-days .f{background:#17254a}.ds-days .p{background:#ffb02e}.ds-days .b{border:1px solid #4e6aa8;background:repeating-linear-gradient(135deg,transparent 0 4px,#4e6aa8 4px 6px)}.ds-days .c{background:repeating-linear-gradient(135deg,#ff8a7a 0 4px,#060d1f 4px 6px)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Night",
+    "overview": "City after dark: the car comes out of a deep blue-black, and amber marks what you can act on. One car holds the stage at a time, photographed full width, with its name and the trip total over it. Everything else is quiet and flat.",
+    "keyCharacteristics": [
+      "Dark only. No glows or coloured shadows.",
+      "Large condensed uppercase names and prices against calm body text.",
+      "Hairline dividers instead of cards in lists.",
+      "One authored motion: the stage photo fades up from dark."
+    ],
+    "rules": [
+      {
+        "name": "The Amber Means Act Rule",
+        "body": "Amber marks what you can act on, what you picked and what it costs. Never decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Shape As Well Rule",
+        "body": "A state is never told by colour alone: booked days are hatched, errors carry text.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Glow Rule",
+        "body": "No glows and no coloured shadows.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the tokens; add one before writing a raw colour.",
+      "Do give each page a title and a heading that can take focus.",
+      "Do keep one car on stage at a time."
+    ],
+    "donts": [
+      "Don't use `line` for anything the reader has to see to understand state.",
+      "Don't add glows, coloured shadows or a light theme without a new decision.",
+      "Don't add a second authored motion."
+    ]
+  }
+}
