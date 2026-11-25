@@ -31,7 +31,6 @@ export interface Rent extends Receipt {
   phone: string;
   address: string;
   car: string;
-  demo: boolean;
 }
 
 /* validation errors are message keys, translated in the browser */

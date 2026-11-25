@@ -29,13 +29,14 @@ class AdminTest extends TestCase
     public function test_guests_cannot_reach_the_admin_pages(): void
     {
         $car = Car::first();
+        $this->booked($car, 2, 5);
 
         $this->get('/admin/dashboard')->assertRedirect('/admin');
         $this->get('/admin/dashboard/cars')->assertRedirect('/admin');
         $this->delete('/admin/dashboard/bookings')->assertRedirect('/admin');
         $this->post('/admin/dashboard/cars', [])->assertRedirect('/admin');
         $this->put("/admin/dashboard/cars/{$car->id}", [])->assertRedirect('/admin');
-        $this->assertSame(4, Booking::count());
+        $this->assertSame(1, Booking::count());
     }
 
     public function test_the_demo_login_works_and_logs_out(): void
@@ -62,15 +63,21 @@ class AdminTest extends TestCase
 
     public function test_the_dashboard_lists_the_bookings_in_date_order(): void
     {
+        // saved latest first, listed earliest first
+        $this->booked(Car::where('model', 'Golf')->firstOrFail(), 10, 13, 'Teszt Béla');
+        $this->booked(Car::where('model', 'Corolla')->firstOrFail(), 2, 5);
+
         $this->actingAs($this->admin())->get('/admin/dashboard')->assertInertia(fn (Page $page) => $page
             ->component('Dashboard')
-            ->has('rents', 4)
+            ->has('rents', 2)
             ->where('rents.0.name', 'Minta Anna')
             ->where('rents.0.car', 'Toyota Corolla'));
     }
 
     public function test_clearing_the_bookings_frees_the_cars(): void
     {
+        $this->booked(Car::first(), 2, 5);
+
         $this->actingAs($this->admin())->delete('/admin/dashboard/bookings')->assertRedirect('/admin/dashboard');
 
         $this->assertSame(0, Booking::count());
@@ -86,6 +93,7 @@ class AdminTest extends TestCase
         $this->assertDatabaseHas('cars', ['brand' => 'Skoda', 'price_per_day' => 9000, 'image' => '']);
 
         $golf = Car::where('model', 'Golf')->firstOrFail();
+        $this->booked($golf, 10, 13);
         $this->put("/admin/dashboard/cars/{$golf->id}", ['brand' => 'Volkswagen', 'model' => 'Golf', 'pricePerDay' => 13000])
             ->assertRedirect('/admin/dashboard/cars');
         $this->assertSame(13000, $golf->refresh()->price_per_day);

@@ -10,7 +10,7 @@ if [ -z "$APP_KEY" ]; then
     export APP_KEY
 fi
 
-# sample data goes into a new database only
+# the admin and the cars go into a new database only
 if [ -f "$DB_DATABASE" ]; then
     php artisan migrate --force
 else

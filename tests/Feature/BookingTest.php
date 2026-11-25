@@ -48,13 +48,15 @@ class BookingTest extends TestCase
 
     public function test_the_home_page_lists_cars_without_personal_data(): void
     {
+        $this->booked($this->golf, 10, 13);
+
         $this->get('/main')
             ->assertOk()
             ->assertInertia(fn (Page $page) => $page
                 ->component('MainPage')
                 ->has('cars', 3)
                 ->has('cars.0.bookings.0', fn (Page $booking) => $booking->has('from')->has('to')))
-            ->assertDontSee('demo@example.com')
+            ->assertDontSee('minta@example.com')
             ->assertDontSee('Minta');
 
         $this->get('/')->assertRedirect('/main');
@@ -67,7 +69,6 @@ class BookingTest extends TestCase
         $booking = Booking::latest('id')->first();
         $this->assertSame(3, $booking->days);
         $this->assertSame(36000, $booking->price);
-        $this->assertFalse($booking->is_demo);
 
         $this->get('/done')->assertInertia(fn (Page $page) => $page
             ->component('Done')
@@ -83,7 +84,7 @@ class BookingTest extends TestCase
         $this->book(['from' => $this->day(2), 'to' => $this->day(4)])->assertSessionHasErrors(['range' => 'taken']);
         $this->book(['from' => $this->day(3), 'to' => $this->day(4)])->assertRedirect('/done');
 
-        $this->assertSame(3, $this->golf->bookings()->count());
+        $this->assertSame(2, $this->golf->bookings()->count());
     }
 
     public function test_bad_input_is_refused_with_translatable_codes(): void
@@ -98,7 +99,7 @@ class BookingTest extends TestCase
             'email' => 'required', 'phone' => 'required', 'address' => 'required',
         ]);
 
-        $this->assertSame(4, Booking::count());
+        $this->assertSame(0, Booking::count());
     }
 
     public function test_the_confirmation_is_only_shown_after_booking(): void

@@ -10,5 +10,5 @@ export const cars = (): Car[] => [
 ];
 
 export const rents = (): Rent[] => [
-  { id: 1, name: "Minta Anna", email: "demo@example.com", phone: "36301234567", address: "Minta utca 1.", car: "Toyota Corolla", ...booked(2, 5), days: 4, price: 44000, demo: true },
+  { id: 1, name: "Minta Anna", email: "demo@example.com", phone: "36301234567", address: "Minta utca 1.", car: "Toyota Corolla", ...booked(2, 5), days: 4, price: 44000 },
 ];

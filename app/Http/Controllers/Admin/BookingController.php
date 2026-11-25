@@ -24,7 +24,6 @@ class BookingController extends Controller
                 'to' => $booking->to_date,
                 'days' => $booking->days,
                 'price' => $booking->price,
-                'demo' => $booking->is_demo,
                 'car' => "{$booking->car->brand} {$booking->car->model}",
             ]),
         ]);

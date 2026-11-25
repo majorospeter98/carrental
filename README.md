@@ -22,7 +22,7 @@ php artisan serve
 
 Then open <http://localhost:8000>.
 
-`composer setup` installs the packages, creates `.env` and the SQLite database, adds the sample data and builds the front end.
+`composer setup` installs the packages, creates `.env` and the SQLite database, adds the admin user and three cars, and builds the front end.
 
 While developing, run `npm run dev` next to `php artisan serve`.
 
@@ -31,7 +31,7 @@ While developing, run `npm run dev` next to `php artisan serve`.
 | `php artisan serve` | Run the app |
 | `npm run dev` | Reload the front end as you edit |
 | `npm run build` | Production build into `public/build/` |
-| `php artisan migrate:fresh --seed` | Start over with the sample data, dated from today |
+| `php artisan migrate:fresh --seed` | Start over: deletes all data, then adds the admin and the cars |
 | `php artisan test` | Run the server tests |
 | `npm test` | Run the front-end tests |
 | `npm run typecheck` | Type-check the front end (the build does not) |
@@ -49,7 +49,7 @@ These are demo credentials, published on purpose. Change them before storing rea
 
 | Folder | Contents |
 |---|---|
-| `app/`, `routes/`, `database/` | Laravel: controllers, validation, models, migrations, sample data |
+| `app/`, `routes/`, `database/` | Laravel: controllers, validation, models, migrations, seeder |
 | `resources/js/` | Vue pages and components in TypeScript, rendered through Inertia |
 | `resources/css/app.css` | Design tokens and shared styles (see `DESIGN.md`) |
 | `tests/Feature/`, `tests/js/` | PHP and Vue tests |

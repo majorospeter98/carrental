@@ -18,7 +18,6 @@
           <div class="text-soft">
             <b class="block break-words text-ink">{{ rent.car }}</b>
             <p>{{ dayLabel(rent.days) }}</p>
-            <p v-if="rent.demo" class="text-sm">{{ t("demoTag") }}</p>
           </div>
           <strong class="text-xl sm:text-right">{{ money(rent.price) }}</strong>
         </li>

@@ -29,7 +29,6 @@ return new class extends Migration
             $table->date('to_date');
             $table->unsignedInteger('days');
             $table->unsignedBigInteger('price');
-            $table->boolean('is_demo')->default(false);
             $table->timestamps();
 
             $table->index(['car_id', 'from_date', 'to_date']);

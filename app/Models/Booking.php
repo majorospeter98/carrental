@@ -8,14 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /* The dates are not cast: "YYYY-MM-DD" strings compare correctly as text. */
-#[Fillable(['car_id', 'name', 'email', 'phone', 'address', 'from_date', 'to_date', 'days', 'price', 'is_demo'])]
+#[Fillable(['car_id', 'name', 'email', 'phone', 'address', 'from_date', 'to_date', 'days', 'price'])]
 class Booking extends Model
 {
-    protected function casts(): array
-    {
-        return ['is_demo' => 'boolean'];
-    }
-
     public function car(): BelongsTo
     {
         return $this->belongsTo(Car::class);
