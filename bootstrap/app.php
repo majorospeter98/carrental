@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Render ends HTTPS at its proxy and passes the original scheme in this header
+        $middleware->trustProxies(at: '*', headers: Request::HEADER_X_FORWARDED_PROTO);
         $middleware->web(append: [HandleInertiaRequests::class]);
         // before route binding, so the page for a missing car gets the shared props
         $middleware->prependToPriorityList(SubstituteBindings::class, HandleInertiaRequests::class);
