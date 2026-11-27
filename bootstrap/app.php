@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\UseClientIpHeader;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // first, so the trusted-proxy step sees the visitor's address
+        $middleware->prepend(UseClientIpHeader::class);
         // Render ends HTTPS at its proxy and passes the original scheme in this header
         $middleware->trustProxies(at: '*', headers: Request::HEADER_X_FORWARDED_PROTO);
         $middleware->web(append: [HandleInertiaRequests::class]);

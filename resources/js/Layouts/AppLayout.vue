@@ -12,28 +12,45 @@
             v-for="lang in (['hu', 'en'] as const)"
             :key="lang"
             type="button"
-            class="min-h-11 min-w-11 px-2 text-sm font-bold uppercase aria-pressed:text-amber aria-pressed:underline aria-pressed:decoration-2 aria-pressed:underline-offset-4"
+            class="min-h-11 min-w-11 px-2 text-sm font-bold uppercase aria-pressed:text-amber-ink aria-pressed:underline aria-pressed:decoration-2 aria-pressed:underline-offset-4"
             :aria-pressed="locale.lang === lang"
             @click="setLang(lang)"
           >
             {{ lang }}
           </button>
         </div>
+        <!-- the name and the icon both say what a press gives -->
+        <button
+          type="button"
+          class="inline-flex min-h-11 min-w-11 items-center justify-center rounded text-soft hover:text-ink"
+          :aria-label="t(appearance.theme === 'light' ? 'darkTheme' : 'lightTheme')"
+          :title="t(appearance.theme === 'light' ? 'darkTheme' : 'lightTheme')"
+          data-theme-toggle
+          @click="toggleTheme"
+        >
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path v-if="appearance.theme === 'light'" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" />
+            <template v-else>
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+            </template>
+          </svg>
+        </button>
       </nav>
     </header>
+
+    <!-- a request that got no page back. Sticky: it takes its own space under the header, and
+         stays at the top once scrolled, away from the button the visitor will press again -->
+    <div class="sticky top-2 z-10 mx-4 sm:mx-auto sm:w-full sm:max-w-md" role="alert">
+      <div v-if="failure" class="notice mt-2 flex items-center justify-between gap-4 border-alert!">
+        <p class="font-semibold">{{ t(failure) }}</p>
+        <button type="button" class="btn btn-quiet px-4" @click="dismiss">{{ t("close") }}</button>
+      </div>
+    </div>
 
     <main ref="main" class="flex-1">
       <slot />
     </main>
-
-    <!-- a request that got no page back. Fixed, so it shows wherever the visitor has scrolled;
-         at the top, so it does not cover the button they will press again -->
-    <div class="fixed inset-x-4 top-2 z-10 mx-auto max-w-md" role="alert">
-      <div v-if="failure" class="notice flex items-center justify-between gap-4 border-alert!">
-        <p class="font-semibold">{{ t(failure) }}</p>
-        <button type="button" class="btn btn-quiet px-4" @click="failure = null">{{ t("close") }}</button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -41,6 +58,7 @@
 import { defineComponent } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { locale, setLang, t, type MessageKey } from "../i18n";
+import { appearance, setTheme } from "../preferences";
 import type { Car } from "../types";
 
 const titles: Partial<Record<string, MessageKey>> = {
@@ -57,7 +75,10 @@ export default defineComponent({
   data() {
     return {
       locale,
+      appearance,
       failure: null as MessageKey | null,
+      // what had focus when the last request started
+      returnTo: null as HTMLElement | null,
       stopListening: [] as (() => void)[],
     };
   },
@@ -90,6 +111,7 @@ export default defineComponent({
     this.stopListening = [
       router.on("start", () => {
         this.failure = null;
+        this.returnTo = document.activeElement as HTMLElement | null;
       }),
       router.on("httpException", (event) => {
         event.preventDefault();
@@ -107,6 +129,21 @@ export default defineComponent({
   methods: {
     t,
     setLang,
+    toggleTheme() {
+      setTheme(this.appearance.theme === "light" ? "dark" : "light");
+    },
+    /* closing removes the button that has focus: send it back to where the visitor was */
+    dismiss() {
+      this.failure = null;
+      this.$nextTick(() => {
+        let target = this.returnTo;
+        if (!target?.isConnected || target === document.body) {
+          target = (this.$refs.main as HTMLElement).querySelector("h1");
+          target?.setAttribute("tabindex", "-1");
+        }
+        target?.focus();
+      });
+    },
   },
 });
 </script>

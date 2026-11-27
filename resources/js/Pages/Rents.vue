@@ -1,11 +1,11 @@
 <template>
-  <div class="grid lg:min-h-[75vh] lg:grid-cols-[1.2fr_1fr]">
+  <div class="grid grid-cols-1 lg:min-h-[75vh] lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
     <!-- the stage is as tall as the form, so a cropped photo is far wider than its column -->
     <CarStage :car="car" :task="t('bookingTitle')" sizes="(min-width: 1024px) 1600px, max(100vw, 750px)">
       <Link href="/main" class="btn btn-quiet">{{ t("back") }}</Link>
     </CarStage>
 
-    <form class="grid content-start gap-4 bg-deep px-4 py-8 sm:px-10" novalidate @submit.prevent="submitForm">
+    <form class="grid grid-cols-1 content-start gap-4 bg-deep px-4 py-8 sm:px-10" novalidate @submit.prevent="submitForm">
       <h2 class="text-3xl">{{ t("bookingTitle") }}</h2>
       <p class="-mt-2 text-sm text-soft">{{ t("allRequired") }}</p>
       <div class="grid gap-4 sm:grid-cols-2">
@@ -16,11 +16,10 @@
       <FormField v-model.trim="form.name" name="name" required maxlength="80" :label="t('name')" :error="form.errors.name" autocomplete="name" />
       <FormField v-model.trim="form.email" name="email" type="email" required maxlength="120" :label="t('email')" :error="form.errors.email" autocomplete="email" />
       <FormField v-model.trim="form.phone" name="phone" type="tel" required maxlength="20" :label="t('phone')" :error="form.errors.phone" autocomplete="tel" placeholder="36301234567" />
-      <FormField v-model.trim="form.address" name="address" required maxlength="160" :label="t('address')" :error="form.errors.address" autocomplete="street-address" />
 
-      <div class="flex items-baseline justify-between gap-4 border-t border-line pt-4" aria-live="polite">
+      <div class="flex flex-wrap items-baseline justify-between gap-4 border-t border-line pt-4" aria-live="polite">
         <span>{{ t("total") }}<br />{{ dayLabel(current.days) }} × {{ money(car.pricePerDay) }}</span>
-        <strong class="font-display text-5xl leading-none text-amber">{{ money(current.price) }}</strong>
+        <strong class="font-display text-5xl leading-none text-amber-ink">{{ money(current.price) }}</strong>
       </div>
       <button type="submit" class="btn" :disabled="form.processing">{{ t("book") }}</button>
     </form>

@@ -36,6 +36,9 @@ ENV APP_NAME="Autókölcsönző" \
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && a2enmod rewrite headers \
+    # do not tell visitors which versions run
+    && echo "expose_php = Off" > "$PHP_INI_DIR/conf.d/hide-version.ini" \
+    && printf 'ServerTokens Prod\nServerSignature Off\n' > /etc/apache2/conf-enabled/zz-hide-version.conf \
     && sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
 COPY --from=vendor /var/www/html ./

@@ -13,7 +13,7 @@ This is a portfolio and job-task project. Its real audience is reviewers and emp
 Inside the demo there are two roles:
 
 - **Renter:** picks a date range, chooses an available car and books it with contact details.
-- **Admin:** logs in, reviews bookings, and adds or edits cars.
+- **Admin:** logs in, reviews and deletes bookings, adds or edits cars, and deletes added cars (not the three seeded ones).
 
 ## Product Purpose
 
@@ -29,8 +29,9 @@ A car rental app ("Autókölcsönző") that demonstrates the author's ability to
 
 Current implementation:
 
-- Laravel 13, Inertia 3, Vue 3 (Options API), Tailwind CSS 4, SQLite. The chosen dates and language are kept in the browser (localStorage).
+- Laravel 13, Inertia 3, Vue 3 (Options API), Tailwind CSS 4, SQLite. The chosen dates, language and theme (dark or light) are kept in the browser (localStorage).
 - The server validates bookings, works out the price and refuses overlapping dates.
+- A booking starts at most one year ahead and lasts at most 90 days, both ends counted.
 - Admin access is a session login with rate limiting. Public pages receive booked dates, never renters' details.
 - Runs locally. Not deployed; the earlier front-end-only version is what Netlify served.
 - PHP tests live in `tests/Feature/`, Vue tests in `tests/js/`.

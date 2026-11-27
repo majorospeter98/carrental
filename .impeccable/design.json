@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-25T13:32:22.288Z",
+  "generatedAt": "2026-11-27T16:56:22.769Z",
   "title": "Design System: Night",
   "extensions": {
     "colorMeta": {
@@ -17,7 +17,8 @@
           "#6a6e79",
           "#9b9ea5",
           "#cdcfd2"
-        ]
+        ],
+        "light": "#f4f6fb"
       },
       "deep": {
         "role": "neutral",
@@ -32,7 +33,8 @@
           "#6d7383",
           "#9da2ac",
           "#ced0d6"
-        ]
+        ],
+        "light": "#ffffff"
       },
       "raise": {
         "role": "neutral",
@@ -47,7 +49,8 @@
           "#747c92",
           "#a2a8b7",
           "#d1d3db"
-        ]
+        ],
+        "light": "#e3e9f6"
       },
       "line": {
         "role": "neutral",
@@ -62,22 +65,24 @@
           "#7c869f",
           "#a7afbf",
           "#d3d7df"
-        ]
+        ],
+        "light": "#cfd8ec"
       },
       "edge": {
         "role": "neutral",
         "displayName": "Edge",
-        "canonical": "#4e6aa8",
+        "canonical": "#5671b0",
         "tonalRamp": [
           "#141b2a",
           "#273554",
           "#3b507e",
-          "#4e6aa8",
+          "#5671b0",
           "#7188b9",
           "#95a6cb",
           "#b8c3dc",
           "#dce1ee"
-        ]
+        ],
+        "light": "#61749f"
       },
       "ink": {
         "role": "neutral",
@@ -92,7 +97,8 @@
           "#f5f8ff",
           "#f8faff",
           "#fcfdff"
-        ]
+        ],
+        "light": "#0b1630"
       },
       "soft": {
         "role": "neutral",
@@ -107,7 +113,8 @@
           "#c8d2e8",
           "#dae1ef",
           "#edf0f7"
-        ]
+        ],
+        "light": "#45567d"
       },
       "amber": {
         "role": "primary",
@@ -152,7 +159,8 @@
           "#94b5ff",
           "#b8cdff",
           "#dbe6ff"
-        ]
+        ],
+        "light": "#1f55cc"
       },
       "alert": {
         "role": "tertiary",
@@ -167,7 +175,8 @@
           "#ffb9af",
           "#ffd0ca",
           "#ffe8e4"
-        ]
+        ],
+        "light": "#b3261e"
       },
       "dusk": {
         "role": "neutral",
@@ -182,6 +191,37 @@
           "#6d7eae",
           "#9da9c9",
           "#ced4e4"
+        ]
+      },
+      "amber-ink": {
+        "role": "primary",
+        "displayName": "Amber Ink",
+        "canonical": "#ffb02e",
+        "light": "#854d00",
+        "tonalRamp": [
+          "#402c0c",
+          "#805817",
+          "#bf8423",
+          "#ffb02e",
+          "#ffc058",
+          "#ffd082",
+          "#ffdfab",
+          "#ffefd5"
+        ]
+      },
+      "on-amber": {
+        "role": "neutral",
+        "displayName": "On Amber",
+        "canonical": "#060d1f",
+        "tonalRamp": [
+          "#020308",
+          "#030710",
+          "#050a17",
+          "#060d1f",
+          "#383d4c",
+          "#6a6e79",
+          "#9b9ea5",
+          "#cdcfd2"
         ]
       }
     },
@@ -247,7 +287,7 @@
       "refersTo": "button-quiet",
       "description": "Secondary actions.",
       "html": "<button class=\"ds-quiet\">Mégse</button>",
-      "css": ".ds-quiet{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:8px 24px;border-radius:4px;font:700 1rem Barlow,sans-serif;border:1px solid;cursor:pointer;background:#060d1f;border-color:#4e6aa8;color:#eef3ff}.ds-quiet:hover{border-color:#ffb02e;color:#ffb02e}.ds-quiet:focus-visible{outline:3px solid var(--color-amber,#ffb02e);outline-offset:2px}"
+      "css": ".ds-quiet{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:8px 24px;border-radius:4px;font:700 1rem Barlow,sans-serif;border:1px solid;cursor:pointer;background:#060d1f;border-color:#5671b0;color:#eef3ff}.ds-quiet:hover{border-color:#ffb02e;color:#ffb02e}.ds-quiet:focus-visible{outline:3px solid var(--color-amber,#ffb02e);outline-offset:2px}"
     },
     {
       "name": "Input field",
@@ -255,7 +295,7 @@
       "refersTo": "input",
       "description": "Labelled field on a panel.",
       "html": "<label class=\"ds-field\">Név<input></label>",
-      "css": ".ds-field{display:grid;gap:4px;font:600 .875rem Barlow,sans-serif;color:#a3b4d8}.ds-field input{min-height:48px;padding:8px 12px;border:1px solid #4e6aa8;border-radius:4px;background:#0b1630;color:#eef3ff;font-size:1rem}.ds-field input:focus-visible{outline:3px solid #ffb02e;outline-offset:2px}"
+      "css": ".ds-field{display:grid;gap:4px;font:600 .875rem Barlow,sans-serif;color:#a3b4d8}.ds-field input{min-height:48px;padding:8px 12px;border:1px solid #5671b0;border-radius:4px;background:#0b1630;color:#eef3ff;font-size:1rem}.ds-field input:focus-visible{outline:3px solid #ffb02e;outline-offset:2px}"
     },
     {
       "name": "Notice",
@@ -270,14 +310,14 @@
       "kind": "custom",
       "description": "Free, selected, booked, and selected but booked.",
       "html": "<div class=\"ds-days\"><i class=\"f\"></i><i class=\"p\"></i><i class=\"b\"></i><i class=\"c\"></i></div>",
-      "css": ".ds-days{display:flex;gap:4px}.ds-days i{width:36px;height:44px;border-radius:2px}.ds-days .f{background:#17254a}.ds-days .p{background:#ffb02e}.ds-days .b{border:1px solid #4e6aa8;background:repeating-linear-gradient(135deg,transparent 0 4px,#4e6aa8 4px 6px)}.ds-days .c{background:repeating-linear-gradient(135deg,#ff8a7a 0 4px,#060d1f 4px 6px)}"
+      "css": ".ds-days{display:flex;gap:4px}.ds-days i{width:36px;height:44px;border-radius:2px;border:1px solid #5671b0}.ds-days .f{background:#17254a}.ds-days .p{background:#ffb02e;border-color:#ffb02e}.ds-days .b{background:linear-gradient(to top right,transparent calc(50% - 1px),#5671b0 0 calc(50% + 1px),transparent 0)}.ds-days .c{border:0;background:linear-gradient(to top right,transparent calc(50% - 1px),#060d1f 0 calc(50% + 1px),transparent 0) #ff8a7a}"
     }
   ],
   "narrative": {
     "northStar": "Night",
     "overview": "City after dark: the car comes out of a deep blue-black, and amber marks what you can act on. One car holds the stage at a time, photographed full width, with its name and the trip total over it. Everything else is quiet and flat.",
     "keyCharacteristics": [
-      "Dark only. No glows or coloured shadows.",
+      "Dark by default, with a light theme switched in the header. No glows or coloured shadows.",
       "Large condensed uppercase names and prices against calm body text.",
       "Hairline dividers instead of cards in lists.",
       "One authored motion: the stage photo fades up from dark."
@@ -290,7 +330,7 @@
       },
       {
         "name": "The Shape As Well Rule",
-        "body": "A state is never told by colour alone: booked days are hatched, errors carry text.",
+        "body": "A state is never told by colour alone: booked days are struck through, errors carry text.",
         "section": "colors"
       },
       {
@@ -306,7 +346,8 @@
     ],
     "donts": [
       "Don't use `line` for anything the reader has to see to understand state.",
-      "Don't add glows, coloured shadows or a light theme without a new decision.",
+      "Don't add glows or coloured shadows without a new decision.",
+      "Don't use `amber` for text or outlines: use `amber-ink`.",
       "Don't add a second authored motion."
     ]
   }

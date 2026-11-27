@@ -67,6 +67,9 @@ return [
 
     'timezone' => 'Europe/Budapest',
 
+    // behind a proxy: the header it puts the visitor's address in (see UseClientIpHeader)
+    'client_ip_header' => env('CLIENT_IP_HEADER'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

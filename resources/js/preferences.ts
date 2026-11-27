@@ -1,7 +1,7 @@
 /* The visitor's choices are kept in the browser (localStorage). */
 import { reactive } from "vue";
 import type { Period } from "./types";
-import { addDays, today } from "./utils/booking";
+import { addDays, isDate, today } from "./utils/booking";
 
 export type Lang = "hu" | "en";
 
@@ -24,18 +24,35 @@ function save(key: string, value: unknown) {
 
 export function loadDates(): Period | null {
   const { from, to } = (load("dates") ?? {}) as Partial<Record<keyof Period, unknown>>;
-  return typeof from === "string" && typeof to === "string" ? { from, to } : null;
+  // an emptied field is saved as ""
+  const ok = (value: unknown): value is string => typeof value === "string" && (value === "" || isDate(value));
+  return ok(from) && ok(to) ? { from, to } : null;
 }
 
 export const loadLang = (): Lang => (load("lang") === "en" ? "en" : "hu");
 
 export const saveLang = (lang: Lang) => save("lang", lang);
 
+export type Theme = "dark" | "light";
+
+/* dark is the design's own look, so it is what a first visit gets */
+export const loadTheme = (): Theme => (load("theme") === "light" ? "light" : "dark");
+
+export const appearance = reactive({ theme: loadTheme() });
+
+/* app.blade.php does the same before the first paint */
+export function setTheme(theme: Theme) {
+  appearance.theme = theme;
+  document.documentElement.dataset.theme = theme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#f4f6fb" : "#060d1f");
+  save("theme", theme);
+}
+
 /* carId is the car last put on stage, so "Back" returns to it. It is not saved. */
 export const preferences = reactive({ dates: loadDates(), carId: null as number | null });
 
 /* What the renter has typed, kept while they look around. Personal data: memory only, never storage. */
-const emptyDraft = { name: "", email: "", phone: "", address: "" };
+const emptyDraft = { name: "", email: "", phone: "" };
 export const draft = reactive({ ...emptyDraft });
 export const clearDraft = () => Object.assign(draft, emptyDraft);
 
@@ -43,7 +60,7 @@ export const clearDraft = () => Object.assign(draft, emptyDraft);
 export function chosenDates(saved: Period | null): Period {
   let { from, to } = saved ?? { from: today(), to: addDays(today(), 2) };
   if (from && from < today()) from = today();
-  if (to && to < today()) to = addDays(from || today(), 2);
+  if (to && to < today()) to = addDays(isDate(from) ? from : today(), 2);
   return { from, to };
 }
 

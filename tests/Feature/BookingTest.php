@@ -36,7 +36,6 @@ class BookingTest extends TestCase
             'name' => 'Teszt Elek',
             'email' => 'a@b.hu',
             'phone' => '+36 30 123 4567',
-            'address' => 'Utca 1.',
             ...$changes,
         ];
     }
@@ -96,10 +95,20 @@ class BookingTest extends TestCase
         $this->book(['name' => str_repeat('a', 81)])->assertSessionHasErrors(['name' => 'tooLong']);
         $this->post("/rents/{$this->golf->id}", [])->assertSessionHasErrors([
             'from' => 'required', 'to' => 'required', 'name' => 'required',
-            'email' => 'required', 'phone' => 'required', 'address' => 'required',
+            'email' => 'required', 'phone' => 'required',
         ]);
 
         $this->assertSame(0, Booking::count());
+    }
+
+    public function test_a_booking_cannot_be_too_far_ahead_or_too_long(): void
+    {
+        $this->book(['from' => $this->day(366), 'to' => $this->day(366)])->assertSessionHasErrors(['from' => 'tooFarAhead']);
+        $this->book(['from' => $this->day(1), 'to' => $this->day(91)])->assertSessionHasErrors(['to' => 'tooLongStay']);
+        $this->book(['to' => '9999-12-31'])->assertSessionHasErrors(['to' => 'tooLongStay']);
+        $this->assertSame(0, Booking::count());
+
+        $this->book(['from' => $this->day(365), 'to' => $this->day(454)])->assertRedirect('/done');
     }
 
     public function test_the_confirmation_is_only_shown_after_booking(): void

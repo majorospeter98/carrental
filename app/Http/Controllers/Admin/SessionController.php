@@ -22,6 +22,9 @@ class SessionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // an empty field is not an attempt: name it and do not count it
+        $request->validate(['username' => 'required', 'password' => 'required'], ['required' => 'required']);
+
         $key = 'login:'.$request->ip();
 
         if (RateLimiter::tooManyAttempts($key, self::MAX_ATTEMPTS)) {

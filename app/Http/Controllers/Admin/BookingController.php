@@ -29,6 +29,13 @@ class BookingController extends Controller
         ]);
     }
 
+    public function destroy(Booking $booking): RedirectResponse
+    {
+        $booking->delete();
+
+        return to_route('admin.bookings');
+    }
+
     public function clear(Request $request): RedirectResponse
     {
         Booking::query()->delete();

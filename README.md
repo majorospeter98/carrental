@@ -7,7 +7,8 @@ A car rental demo: pick your dates, see which cars are available and what the tr
 - Search by pick-up and return date; every car shows whether it is available and its total
 - Booking form with live day count and price
 - The server checks every booking, works out the price and refuses double bookings
-- Admin area behind a session login: list of bookings, list of cars, add and edit cars
+- Dark and light theme, switched in the header
+- Admin area behind a session login: list of bookings, list of cars, add and edit cars, delete single bookings and added cars (the three default cars stay)
 
 ## Setup
 

@@ -16,7 +16,7 @@ test("sends the form with the chosen dates, but no price", async () => {
 
   const [url, data] = vi.mocked(router.post).mock.calls[0];
   expect(url).toBe("/rents/1");
-  expect(data).toEqual({ name: "Teszt Elek", email: "", phone: "", address: "", from: today(), to: addDays(today(), 2) });
+  expect(data).toEqual({ name: "Teszt Elek", email: "", phone: "", from: today(), to: addDays(today(), 2) });
 });
 
 test("shows the server's errors and forgets the date ones when the dates change", async () => {

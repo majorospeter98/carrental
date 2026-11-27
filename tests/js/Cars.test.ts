@@ -40,3 +40,32 @@ test("sends an edit and returns to the list once saved", async () => {
   await wrapper.vm.$nextTick();
   expect(wrapper.find("form").exists()).toBe(false);
 });
+
+test("does not save an edit that changes nothing", async () => {
+  const wrapper = render();
+  await button(wrapper, "Szerkesztés")!.trigger("click");
+  const save = () => button(wrapper, "Mentés")!.element.disabled;
+  const price = wrapper.find<HTMLInputElement>("input[name='pricePerDay']");
+  const original = price.element.value;
+
+  expect(save()).toBe(true);
+  await wrapper.find("form").trigger("submit");
+  expect(router.put).not.toHaveBeenCalled();
+
+  await price.setValue("13000");
+  expect(save()).toBe(false);
+  await price.setValue(original);
+  expect(save()).toBe(true);
+});
+
+test("deletes an added car only, and only after confirming", async () => {
+  const [golf] = cars();
+  const added = { ...golf, id: 4, brand: "Skoda", model: "Octavia", image: "", deletable: true };
+  const wrapper = mount(Cars, { props: { cars: [golf, added] } });
+  expect(wrapper.findAll("button").filter((b) => b.text() === "Törlés")).toHaveLength(1);
+
+  await button(wrapper, "Törlés")!.trigger("click");
+  expect(router.delete).not.toHaveBeenCalled();
+  await button(wrapper, "Igen, törlöm")!.trigger("click");
+  expect(vi.mocked(router.delete).mock.calls[0][0]).toBe("/admin/dashboard/cars/4");
+});

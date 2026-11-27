@@ -84,6 +84,52 @@ class AdminTest extends TestCase
         $this->get('/main')->assertInertia(fn (Page $page) => $page->where('cars.0.bookings', []));
     }
 
+    public function test_one_booking_can_be_deleted_and_the_others_stay(): void
+    {
+        $this->booked(Car::first(), 2, 5);
+        $this->booked(Car::first(), 10, 13, 'Teszt Béla');
+        $first = Booking::orderBy('id')->firstOrFail();
+
+        $this->delete("/admin/dashboard/bookings/{$first->id}")->assertRedirect('/admin');
+        $this->assertSame(2, Booking::count());
+
+        $this->actingAs($this->admin())->delete("/admin/dashboard/bookings/{$first->id}")->assertRedirect('/admin/dashboard');
+        $this->assertSame(['Teszt Béla'], Booking::pluck('name')->all());
+    }
+
+    public function test_an_added_car_can_be_deleted_with_its_bookings(): void
+    {
+        $car = Car::create(['brand' => 'Skoda', 'model' => 'Octavia', 'price_per_day' => 9000, 'image' => '']);
+        $this->booked($car, 2, 5);
+
+        $this->delete("/admin/dashboard/cars/{$car->id}")->assertRedirect('/admin');
+        $this->assertModelExists($car);
+
+        $this->actingAs($this->admin())->delete("/admin/dashboard/cars/{$car->id}")->assertRedirect('/admin/dashboard/cars');
+        $this->assertModelMissing($car);
+        $this->assertSame(0, Booking::count());
+    }
+
+    public function test_deleting_what_is_already_gone_returns_to_the_list(): void
+    {
+        $this->delete('/admin/dashboard/bookings/999')->assertRedirect('/admin');
+
+        $this->actingAs($this->admin());
+        $this->delete('/admin/dashboard/bookings/999')->assertRedirect('/admin/dashboard');
+        $this->delete('/admin/dashboard/cars/999')->assertRedirect('/admin/dashboard/cars');
+    }
+
+    public function test_the_default_cars_cannot_be_deleted(): void
+    {
+        $this->actingAs($this->admin());
+
+        foreach (Car::all() as $car) {
+            $this->delete("/admin/dashboard/cars/{$car->id}")->assertForbidden();
+        }
+
+        $this->assertSame(3, Car::count());
+    }
+
     public function test_a_car_can_be_added_and_edited(): void
     {
         $this->actingAs($this->admin());
@@ -108,5 +154,27 @@ class AdminTest extends TestCase
             ->assertSessionHasErrors(['brand' => 'required', 'model' => 'tooLong', 'pricePerDay' => 'badPrice']);
 
         $this->assertSame(3, Car::count());
+    }
+
+    public function test_empty_login_fields_are_named_and_not_counted(): void
+    {
+        for ($i = 0; $i < 6; $i++) {
+            $this->post('/admin', [])->assertSessionHasErrors(['username' => 'required', 'password' => 'required']);
+        }
+
+        $this->post('/admin', ['username' => 'admin', 'password' => 'admin12345'])->assertRedirect('/admin/dashboard');
+    }
+
+    public function test_a_configured_header_gives_each_visitor_their_own_login_limit(): void
+    {
+        config(['app.client_ip_header' => 'CF-Connecting-IP']);
+        $wrong = ['username' => 'admin', 'password' => 'nope'];
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/admin', $wrong, ['CF-Connecting-IP' => '203.0.113.10']);
+        }
+
+        $this->post('/admin', $wrong, ['CF-Connecting-IP' => '203.0.113.10'])->assertSessionHasErrors(['login' => 'tooMany']);
+        $this->post('/admin', $wrong, ['CF-Connecting-IP' => '198.51.100.20'])->assertSessionHasErrors(['login' => 'loginError']);
     }
 }

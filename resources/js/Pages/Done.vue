@@ -7,7 +7,7 @@
         <p class="mb-4">{{ t("doneText") }}</p>
       </div>
       <div class="sm:text-right">
-        <strong class="block font-display text-6xl leading-none text-amber">{{ money(rent.price) }}</strong>
+        <strong class="block font-display text-6xl leading-none text-amber-ink">{{ money(rent.price) }}</strong>
         <span class="mb-3 block">{{ dayLabel(rent.days) }}</span>
         <Link href="/main" class="btn">{{ t("newSearch") }}</Link>
       </div>

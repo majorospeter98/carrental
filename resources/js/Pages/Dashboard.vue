@@ -13,23 +13,28 @@
             <b class="block text-ink">{{ rent.name }}</b>
             <p>{{ rent.email }}</p>
             <p>{{ rent.phone }}</p>
-            <p>{{ rent.address }}</p>
+            <p v-if="rent.address">{{ rent.address }}</p>
           </div>
           <div class="text-soft">
             <b class="block break-words text-ink">{{ rent.car }}</b>
             <p>{{ dayLabel(rent.days) }}</p>
           </div>
           <strong class="text-xl sm:text-right">{{ money(rent.price) }}</strong>
+          <ConfirmBox v-if="confirming === rent.id" class="sm:col-span-full" :question="t('deleteBookingConfirm')" :busy="deleting" @yes="remove(rent.id)" @no="keep" />
+          <button
+            v-else
+            type="button"
+            class="btn btn-quiet justify-self-start sm:col-span-full sm:justify-self-end"
+            :data-return="rent.id"
+            :aria-label="`${t('delete')}: ${rent.name}, ${rent.car}, ${fullDate(rent.from)}`"
+            @click="ask(rent.id)"
+          >
+            {{ t("delete") }}
+          </button>
         </li>
       </ul>
-      <button v-if="!confirming" ref="clear" type="button" class="btn btn-quiet mt-4" @click="ask">{{ t("clear") }}</button>
-      <div v-else class="notice mt-4" role="group" aria-labelledby="clear-question">
-        <p id="clear-question" class="mb-3 font-semibold">{{ t("clearConfirm") }}</p>
-        <div class="flex flex-wrap gap-3">
-          <button type="button" class="btn" @click="clear">{{ t("clearYes") }}</button>
-          <button ref="keep" type="button" class="btn btn-quiet" @click="keep">{{ t("cancel") }}</button>
-        </div>
-      </div>
+      <ConfirmBox v-if="confirming === 'all'" class="mt-4" :question="t('clearConfirm')" :busy="deleting" @yes="clear" @no="keep" />
+      <button v-else type="button" class="btn btn-quiet mt-4" data-return="all" @click="ask('all')">{{ t("clear") }}</button>
     </template>
     <p v-else class="notice text-lg">{{ t("noBookings") }}</p>
   </div>
@@ -39,36 +44,51 @@
 import { defineComponent, type PropType } from "vue";
 import { router } from "@inertiajs/vue3";
 import AdminNav from "../components/AdminNav.vue";
+import ConfirmBox from "../components/ConfirmBox.vue";
 import { dayLabel, fullDate, money, t } from "../i18n";
 import type { Rent } from "../types";
 
 export default defineComponent({
-  components: { AdminNav },
+  components: { AdminNav, ConfirmBox },
   props: {
     rents: { type: Array as PropType<Rent[]>, required: true },
   },
   data() {
-    return { confirming: false };
+    return {
+      // the one question that is open: a booking's id, or all of them
+      confirming: null as number | "all" | null,
+      deleting: false,
+    };
   },
   methods: {
     t,
     money,
     fullDate,
     dayLabel,
-    ask() {
-      this.confirming = true;
-      this.$nextTick(() => (this.$refs.keep as HTMLElement).focus());
+    ask(target: number | "all") {
+      this.confirming = target;
     },
+    /* focus goes back to the button that asked */
     keep() {
-      this.confirming = false;
-      this.$nextTick(() => (this.$refs.clear as HTMLElement).focus());
+      const key = this.confirming;
+      this.confirming = null;
+      this.$nextTick(() => (this.$el as HTMLElement).querySelector<HTMLElement>(`[data-return="${key}"]`)?.focus());
+    },
+    remove(id: number) {
+      this.destroy(`/admin/dashboard/bookings/${id}`);
     },
     clear() {
-      router.delete("/admin/dashboard/bookings", {
+      this.destroy("/admin/dashboard/bookings");
+    },
+    destroy(url: string) {
+      this.deleting = true;
+      router.delete(url, {
+        preserveScroll: true,
         onSuccess: () => {
-          this.confirming = false;
+          this.confirming = null;
           this.$nextTick(() => (this.$refs.title as HTMLElement).focus());
         },
+        onFinish: () => (this.deleting = false),
       });
     },
   },

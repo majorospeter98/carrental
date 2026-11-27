@@ -39,7 +39,6 @@ class BookingController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
-                'address' => $data['address'],
                 'from_date' => $data['from'],
                 'to_date' => $data['to'],
                 'days' => $days,

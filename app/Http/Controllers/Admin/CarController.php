@@ -14,7 +14,8 @@ class CarController extends Controller
     public function index(): Response
     {
         return Inertia::render('Cars', [
-            'cars' => Car::with('bookings')->orderBy('id')->get()->map->toPublic(),
+            'cars' => Car::with('bookings')->orderBy('id')->get()
+                ->map(fn (Car $car) => [...$car->toPublic(), 'deletable' => ! $car->isDefault()]),
         ]);
     }
 
@@ -28,6 +29,16 @@ class CarController extends Controller
     public function update(CarRequest $request, Car $car): RedirectResponse
     {
         $car->update($request->attributesForCar());
+
+        return to_route('admin.cars');
+    }
+
+    /* The car's bookings go with it (cascade on the foreign key). */
+    public function destroy(Car $car): RedirectResponse
+    {
+        abort_if($car->isDefault(), 403);
+
+        $car->delete();
 
         return to_route('admin.cars');
     }

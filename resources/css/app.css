@@ -1,22 +1,57 @@
 @import "tailwindcss";
 
-/* "Night": city after dark. Amber is the action, price and selected day. No glows. */
+/* "Night": city after dark, and its light counterpart. Amber is the action, price and
+   selected day. No glows. tests/js/theme.test.ts checks the contrast of both palettes. */
 @theme {
   --color-night: #060d1f;
   --color-deep: #0b1630;
   --color-raise: #17254a;
   --color-line: #24365f;
-  --color-edge: #4e6aa8;
+  --color-edge: #5671b0;
   --color-ink: #eef3ff;
   --color-soft: #a3b4d8;
   --color-amber: #ffb02e;
   --color-amber-lift: #ffc460;
+  /* amber as text, border and focus ring: the fill colour is too pale for that by day */
+  --color-amber-ink: #ffb02e;
+  --color-on-amber: #060d1f;
   --color-cobalt: #4d83ff;
   --color-alert: #ff8a7a;
   --color-dusk: #0b2878;
 
   --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Barlow Condensed", "Barlow", ui-sans-serif, sans-serif;
+}
+
+/* the light theme: the same tokens with other values */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-night: #f4f6fb;
+  --color-deep: #ffffff;
+  --color-raise: #e3e9f6;
+  --color-line: #cfd8ec;
+  --color-edge: #61749f;
+  --color-ink: #0b1630;
+  --color-soft: #45567d;
+  --color-amber-ink: #854d00;
+  --color-cobalt: #1f55cc;
+  --color-alert: #b3261e;
+}
+
+/* the photo stage is dark in both themes, so the text over a photo stays readable */
+:root[data-theme="light"] .on-stage {
+  color-scheme: dark;
+  color: var(--color-ink);
+  --color-night: #060d1f;
+  --color-deep: #0b1630;
+  --color-raise: #17254a;
+  --color-line: #24365f;
+  --color-edge: #5671b0;
+  --color-ink: #eef3ff;
+  --color-soft: #a3b4d8;
+  --color-amber-ink: #ffb02e;
+  --color-cobalt: #4d83ff;
+  --color-alert: #ff8a7a;
 }
 
 @layer base {
@@ -42,14 +77,14 @@
     cursor: pointer;
   }
   input {
-    caret-color: var(--color-amber);
+    caret-color: var(--color-amber-ink);
   }
   ::selection {
     background: var(--color-amber);
-    color: var(--color-night);
+    color: var(--color-on-amber);
   }
   :focus-visible {
-    outline: 3px solid var(--color-amber);
+    outline: 3px solid var(--color-amber-ink);
     outline-offset: 2px;
   }
   /* headings take focus only from code, to announce a new page */
@@ -60,11 +95,20 @@
 }
 
 @layer components {
+  /* its own ground under the photo: the light text must not sit on a light page while the
+     photo loads, and contrast checkers read this colour, not the layers above it */
+  .on-stage {
+    background-color: var(--color-night);
+  }
   .btn {
-    @apply inline-flex min-h-12 items-center justify-center rounded border border-amber bg-amber px-6 py-2 font-bold whitespace-nowrap text-night transition-colors hover:bg-amber-lift;
+    @apply inline-flex min-h-12 items-center justify-center rounded border border-amber-ink bg-amber px-6 py-2 text-center font-bold text-on-amber transition-colors hover:bg-amber-lift;
+  }
+  /* a request is running */
+  .btn:disabled {
+    @apply cursor-progress opacity-60;
   }
   .btn-quiet {
-    @apply border-edge bg-night/60 text-ink hover:border-amber hover:bg-night/60 hover:text-amber;
+    @apply border-edge bg-night/60 text-ink hover:border-amber-ink hover:bg-night/60 hover:text-amber-ink;
   }
   .btn-off {
     @apply cursor-not-allowed border-line bg-deep text-soft hover:bg-deep;
@@ -89,7 +133,7 @@
     @apply border border-edge bg-raise;
   }
   .day-picked {
-    @apply bg-amber;
+    @apply border border-amber-ink bg-amber;
   }
   .day-booked {
     border: 1px solid var(--color-edge);
@@ -107,7 +151,7 @@
 @keyframes arrive {
   from {
     opacity: 0;
-    filter: brightness(0.2) blur(10px);
+    filter: brightness(0.2);
     transform: scale(1.04);
   }
 }

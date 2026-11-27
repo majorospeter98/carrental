@@ -55,6 +55,6 @@ test("the chosen car and the typed details survive leaving the page", async () =
 
 test("the date strip says where it stops", () => {
   const strip = (days: number) => mount(DateStrip, { props: { car: cars()[0], from: today(), to: addDays(today(), days) } });
-  expect(strip(100).text()).toContain("A naptár utolsó látható napja:");
+  expect(strip(80).text()).toContain("A naptár utolsó látható napja:");
   expect(strip(5).text()).not.toContain("A naptár utolsó látható napja:");
 });

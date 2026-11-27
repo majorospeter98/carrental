@@ -5,6 +5,13 @@ import type { Car, Period } from "../types";
 const DAY = 86400000;
 const pad = (n: number) => String(n).padStart(2, "0");
 
+/* how far ahead a rental may start, and how many days it may last: the server checks the same */
+const MAX_AHEAD = 365;
+const MAX_DAYS = 90;
+
+/* a complete date with a four-digit year */
+export const isDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value));
+
 export function today() {
   const d = new Date(); // the visitor's own calendar day, not UTC
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -15,7 +22,12 @@ export const addDays = (iso: string, n: number) => new Date(Date.parse(iso) + n 
 /* Both the pick-up and the return day are charged. */
 export const dayCount = (from: string, to: string) => Math.round((Date.parse(to) - Date.parse(from)) / DAY) + 1;
 
-export const isValidRange = (from: string, to: string) => !!from && !!to && from >= today() && to >= from;
+export const lastPickup = () => addDays(today(), MAX_AHEAD);
+
+export const lastReturn = (from: string) => addDays(isDate(from) ? from : lastPickup(), MAX_DAYS - 1);
+
+export const isValidRange = (from: string, to: string) =>
+  isDate(from) && isDate(to) && from >= today() && from <= lastPickup() && to >= from && to <= lastReturn(from);
 
 export const isFree = (car: Car, from: string, to: string) =>
   (car.bookings ?? []).every((b) => to < b.from || from > b.to);
@@ -41,8 +53,12 @@ export function stripDays(from: string, to: string) {
 export function dateErrors(from: string, to: string) {
   const errors: Partial<Record<keyof Period, MessageKey>> = {};
   if (!from) errors.from = "required";
+  else if (!isDate(from)) errors.from = "badDate";
   else if (from < today()) errors.from = "badFrom";
+  else if (from > lastPickup()) errors.from = "tooFarAhead";
   if (!to) errors.to = "required";
-  else if (from && to < from) errors.to = "badTo";
+  else if (!isDate(to)) errors.to = "badDate";
+  else if (isDate(from) && to < from) errors.to = "badTo";
+  else if (isDate(from) && to > lastReturn(from)) errors.to = "tooLongStay";
   return errors;
 }

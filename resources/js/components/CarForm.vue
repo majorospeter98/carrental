@@ -6,7 +6,7 @@
     <FormField v-model.trim="form.model" name="model" required maxlength="30" :label="t('model')" :error="form.errors.model" />
     <FormField v-model="form.pricePerDay" name="pricePerDay" type="number" required min="1000" max="50000" :label="t('price')" :error="form.errors.pricePerDay" />
     <div class="flex flex-wrap gap-3">
-      <button type="submit" class="btn" :disabled="form.processing">{{ t("save") }}</button>
+      <button type="submit" class="btn" :disabled="form.processing || unchanged">{{ t("save") }}</button>
       <button type="button" class="btn btn-quiet" @click="$emit('close')">{{ t("cancel") }}</button>
     </div>
   </form>
@@ -38,6 +38,15 @@ export default defineComponent({
       form: useForm(fromCar(this.car)),
     };
   },
+  computed: {
+    /* an edit that matches the car has nothing to save */
+    unchanged(): boolean {
+      if (!this.car) return false;
+      const saved = fromCar(this.car);
+      // as text: a retyped price is a string, the car's is a number
+      return (["brand", "model", "pricePerDay"] as const).every((key) => String(this.form[key]).trim() === String(saved[key]).trim());
+    },
+  },
   watch: {
     "car.id"() {
       this.form = useForm(fromCar(this.car));
@@ -50,6 +59,7 @@ export default defineComponent({
     t,
     /* the server validates; its errors come back into the form */
     submit() {
+      if (this.unchanged) return;
       const options = {
         preserveScroll: true,
         onSuccess: () => this.$emit("saved", `${this.form.brand} ${this.form.model}`),

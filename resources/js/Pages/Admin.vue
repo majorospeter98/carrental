@@ -2,9 +2,9 @@
   <div class="page-narrow">
     <!-- smaller than page-title: "Bejelentkezés" must fit the narrow column on one line -->
     <h1 class="mb-6 text-5xl wrap-anywhere">{{ t("loginTitle") }}</h1>
-    <form class="grid gap-4" novalidate @submit.prevent="adminForm">
-      <FormField v-model="form.username" name="username" required :label="t('username')" autocomplete="username" />
-      <FormField v-model="form.password" name="password" type="password" required :label="t('password')" autocomplete="current-password" :aria-describedby="loginError ? 'login-error' : undefined" />
+    <form class="grid grid-cols-1 gap-4" novalidate @submit.prevent="adminForm">
+      <FormField v-model="form.username" name="username" required :label="t('username')" :error="errors.username" autocomplete="username" />
+      <FormField v-model="form.password" name="password" type="password" required :label="t('password')" :error="errors.password" autocomplete="current-password" v-bind="loginError ? { 'aria-describedby': 'login-error' } : {}" />
       <p v-if="loginError" id="login-error" class="text-sm font-semibold text-alert" role="alert">{{ t(loginError) }}</p>
       <button type="submit" class="btn" :disabled="form.processing">{{ t("login") }}</button>
       <p class="text-sm text-soft">{{ t("demoHint") }}</p>
@@ -27,9 +27,12 @@ export default defineComponent({
     };
   },
   computed: {
+    errors(): FieldErrors {
+      return this.form.errors as FieldErrors;
+    },
     // "login" is an error from the server, not a field of the form
     loginError() {
-      return (this.form.errors as FieldErrors).login;
+      return this.errors.login;
     },
   },
   methods: {
@@ -37,7 +40,11 @@ export default defineComponent({
     adminForm() {
       this.form.post("/admin", {
         // the disabled button dropped focus: put it where the retry starts
-        onError: () => this.$nextTick(() => (this.$el as HTMLElement).querySelector<HTMLElement>("#field-password")?.focus()),
+        onError: () =>
+          this.$nextTick(() => {
+            const el = this.$el as HTMLElement;
+            (el.querySelector<HTMLElement>('[aria-invalid="true"]') ?? el.querySelector<HTMLElement>("#field-password"))?.focus();
+          }),
       });
     },
   },

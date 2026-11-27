@@ -15,6 +15,8 @@ export interface Car {
   pricePerDay: number;
   image: string;
   bookings: Period[];
+  /* sent to the admin's car list only */
+  deletable?: boolean;
 }
 
 /* the booking just made, on the confirmation page */
@@ -29,7 +31,8 @@ export interface Rent extends Receipt {
   name: string;
   email: string;
   phone: string;
-  address: string;
+  /* only bookings made while the form still asked for it */
+  address: string | null;
   car: string;
 }
 

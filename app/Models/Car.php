@@ -14,6 +14,12 @@ class Car extends Model
         return $this->hasMany(Booking::class);
     }
 
+    /* The seeded cars are the ones with a photo: the admin's form cannot set one. */
+    public function isDefault(): bool
+    {
+        return $this->image !== '';
+    }
+
     /**
      * What any visitor may see: booked periods only, never who booked them.
      */

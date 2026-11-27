@@ -6,6 +6,7 @@
     :label="t('from')"
     :error="errors.from"
     :min="today"
+    :max="latestStart"
     :model-value="dates.from"
     @update:model-value="setStart"
   />
@@ -16,6 +17,7 @@
     :label="t('to')"
     :error="errors.to"
     :min="dates.from || today"
+    :max="latestEnd"
     :model-value="dates.to"
     @update:model-value="setEnd"
   />
@@ -25,7 +27,7 @@
 import { defineComponent, type PropType } from "vue";
 import FormField from "./FormField.vue";
 import { chosenDates, preferences, setDates } from "../preferences";
-import { today } from "../utils/booking";
+import { lastPickup, lastReturn, today } from "../utils/booking";
 import { t } from "../i18n";
 import type { FieldErrors, Period } from "../types";
 
@@ -35,11 +37,15 @@ export default defineComponent({
     errors: { type: Object as PropType<FieldErrors>, default: () => ({}) },
   },
   data() {
-    return { today: today() };
+    // "max" also makes the browser move on after a four-digit year
+    return { today: today(), latestStart: lastPickup() };
   },
   computed: {
     dates(): Period {
       return chosenDates(preferences.dates);
+    },
+    latestEnd(): string {
+      return lastReturn(this.dates.from);
     },
   },
   methods: {

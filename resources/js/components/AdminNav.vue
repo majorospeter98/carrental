@@ -4,7 +4,7 @@
       v-for="link in links"
       :key="link.to"
       :href="link.to"
-      class="inline-flex min-h-11 items-center rounded px-3 font-bold sm:px-5 text-soft aria-[current=page]:bg-deep aria-[current=page]:text-amber"
+      class="inline-flex min-h-11 items-center rounded px-3 font-bold sm:px-5 text-soft aria-[current=page]:bg-deep aria-[current=page]:text-amber-ink"
       :aria-current="$page.url === link.to ? 'page' : undefined"
     >{{ t(link.label) }}</Link>
     <button type="button" class="btn btn-quiet ml-auto min-h-11 px-4 sm:px-6" @click="logOutAdmin">{{ t("logout") }}</button>
